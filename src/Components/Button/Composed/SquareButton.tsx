@@ -1,85 +1,63 @@
 // Libraries
-import React, {Component, MouseEvent, RefObject} from 'react'
+import React, {forwardRef} from 'react'
 
 // Components
-import {ButtonBase} from '../Base/ButtonBase'
-import {Icon} from '../../Icon/Icon'
-
-// Styles
-import '../Button.scss'
+import {ButtonBase, ButtonBaseRef} from '../Base/ButtonBase'
+import {Icon} from '../../Icon/Base/Icon'
 
 // Types
 import {
+  Omit,
   ComponentStatus,
   ComponentColor,
   ComponentSize,
   ButtonShape,
   IconFont,
   ButtonType,
-  StandardClassProps,
 } from '../../../Types'
+import {ButtonBaseProps} from '../Base/ButtonBase'
 
-interface Props extends StandardClassProps {
-  /** Function to be called on button click */
-  onClick?: (e?: MouseEvent<HTMLButtonElement>) => void
+export interface SquareButtonProps extends Omit<ButtonBaseProps, 'Shape'> {
   /** Icon to be displayed to the left of text or in place of text */
   icon: IconFont
-  /** Text to be displayed on hover tooltip */
-  titleText?: string
-  /** Keyboard control tab order  */
-  tabIndex?: number
-  /** Button color */
-  color: ComponentColor
-  /** Button size */
-  size: ComponentSize
-  /** Button status state default, loading, or disabled */
-  status: ComponentStatus
-  /** Toggles button highlighted active state */
-  active: boolean
-  /** Button type of 'button' or 'submit' */
-  type: ButtonType
-  /** React Ref object */
-  refObject?: RefObject<HTMLButtonElement>
 }
 
-export class SquareButton extends Component<Props> {
-  public static readonly displayName = 'SquareButton'
+export type SquareButtonRef = ButtonBaseRef
 
-  public static defaultProps = {
-    color: ComponentColor.Default,
-    size: ComponentSize.Small,
-    status: ComponentStatus.Default,
-    active: false,
-    type: ButtonType.Button,
-    testID: 'square-button',
-  }
-
-  public ref: RefObject<HTMLButtonElement> = React.createRef()
-
-  public render() {
-    const {
+export const SquareButton = forwardRef<SquareButtonRef, SquareButtonProps>(
+  (
+    {
       className,
       titleText,
-      refObject,
       tabIndex,
       onClick,
-      testID,
-      status,
-      active,
-      color,
-      type,
-      size,
       style,
       id,
-    } = this.props
-
+      icon,
+      color = ComponentColor.Default,
+      size = ComponentSize.Small,
+      status = ComponentStatus.Default,
+      active = false,
+      type = ButtonType.Button,
+      testID = 'square-button',
+      onMouseOut,
+      onMouseOver,
+      onMouseEnter,
+      onMouseLeave,
+    },
+    ref
+  ) => {
     return (
       <ButtonBase
         className={className}
         titleText={titleText}
-        refObject={refObject}
+        ref={ref}
         tabIndex={!!tabIndex ? tabIndex : 0}
         onClick={onClick}
+        onMouseOut={onMouseOut}
+        onMouseOver={onMouseOver}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         testID={testID}
         status={status}
         active={active}
@@ -90,29 +68,13 @@ export class SquareButton extends Component<Props> {
         style={style}
         id={id}
       >
-        {this.icon}
-        {this.statusIndicator}
+        {!!icon && <Icon glyph={icon} className="cf-button-icon" />}
+        {status === ComponentStatus.Loading && (
+          <div className={`cf-button-spinner cf-button-spinner--${size}`} />
+        )}
       </ButtonBase>
     )
   }
+)
 
-  private get icon(): JSX.Element | null {
-    const {icon} = this.props
-
-    if (icon) {
-      return <Icon glyph={icon} className="cf-button-icon" />
-    }
-
-    return null
-  }
-
-  private get statusIndicator(): JSX.Element | null {
-    const {status, size} = this.props
-
-    if (status === ComponentStatus.Loading) {
-      return <div className={`cf-button-spinner cf-button-spinner--${size}`} />
-    }
-
-    return null
-  }
-}
+SquareButton.displayName = 'SquareButton'

@@ -1,4 +1,4 @@
-@import '../../Styles/modules';
+@import '../../Styles/variables';
 
 /*
   Color Picker Widget
@@ -11,8 +11,6 @@ $color-picker--margin: 0;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  width: 100%;
-  min-width: 160px;
 }
 
 .cf-color-picker--swatches {
@@ -88,12 +86,12 @@ $color-picker--margin: 0;
   position: relative;
 }
 
-.input.cf-color-picker--input {
+.cf-input.cf-color-picker--input {
   flex: 1 0 0;
   margin-right: $cf-marg-a;
 
   > input {
-    padding-left: $cf-marg-d;
+    padding-left: $cf-marg-d - $cf-marg-a;
   }
 }
 
@@ -110,7 +108,7 @@ $color-picker--margin: 0;
   border: $cf-border solid $g5-pepper;
   transition: background-color 0.25s ease, border-color 0.25s ease;
 
-  .input:hover + & {
+  .cf-input:hover + & {
     border-color: $g7-graphite;
   }
 }

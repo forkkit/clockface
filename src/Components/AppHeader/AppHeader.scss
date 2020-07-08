@@ -1,0 +1,65 @@
+@import '../../Styles/variables';
+
+/*
+   App Header
+   -----------------------------------------------------------------------------
+*/
+
+.cf-app-header {
+  width: 100%;
+  min-width: 100%;
+  background-color: $g2-kevlar;
+  padding: $cf-marg-a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+
+  + .clockface--app-wrapper {
+    top: 30px;
+  }
+}
+
+/*
+  Size Modifiers
+  ------------------------------------------------------------------------------
+*/
+
+@mixin appHeaderSizeModifier($fontSize, $padding, $height) {
+  font-size: $fontSize;
+  padding: $padding;
+  line-height: $height - ($cf-border * 2);
+
+  + .clockface--app-wrapper {
+    top: $height + ($padding * 2);
+    height: calc(100% - #{$height + ($padding * 2)});
+  }
+}
+
+.cf-app-header__xs {
+  @include appHeaderSizeModifier(
+    $cf-form-xs-font,
+    $cf-form-xs-padding,
+    $cf-form-xs-height
+  );
+}
+.cf-app-header__sm {
+  @include appHeaderSizeModifier(
+    $cf-form-sm-font,
+    $cf-form-sm-padding,
+    $cf-form-sm-height
+  );
+}
+.cf-app-header__md {
+  @include appHeaderSizeModifier(
+    $cf-form-md-font,
+    $cf-form-md-padding,
+    $cf-form-md-height
+  );
+}
+.cf-app-header__lg {
+  @include appHeaderSizeModifier(
+    $cf-form-lg-font,
+    $cf-form-lg-padding,
+    $cf-form-lg-height
+  );
+}

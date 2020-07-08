@@ -1,0 +1,345 @@
+@import '../../../Styles/variables';
+
+$slider-bg: $g2-kevlar;
+$slider-hover-border: $g7-graphite;
+
+$slider-handle: $c-pool;
+$slider-handle-focus: $c-laser;
+$slider-handle-disabled: $g4-onyx;
+$slider-handle-height: $cf-marg-c;
+
+$slider-track: $g5-pepper;
+$slider-track-disabled: $g3-castle;
+$slider-track-height: $cf-marg-a;
+
+$slider-disabled-text: $g9-mountain;
+
+$slider-focus-border: $c-pool;
+$slider-hover: $g17-whisper;
+
+.cf-input input[type='range'] {
+  -webkit-appearance: none;
+  border: none;
+  height: $slider-track-height;
+  background: $slider-track;
+  padding: 0;
+
+  &:hover {
+    background: $slider-hover-border;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-slider-runnable-track {
+    height: $slider-track-height;
+    background: transparent;
+    border: none;
+    border-radius: $cf-radius;
+
+    &:focus {
+      background: $slider-focus-border;
+    }
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: $slider-handle-height;
+    width: $slider-handle-height;
+    border-radius: $cf-radius;
+    background: $slider-handle;
+    margin-top: -(($slider-handle-height/2) - ($slider-track-height/2));
+
+    &:hover,
+    &:focus {
+      background: $slider-handle-focus;
+    }
+  }
+
+  &::-moz-range-track {
+    height: $slider-track-height;
+    border-radius: $cf-radius;
+    background: transparent;
+    border: none;
+  }
+
+  &::-moz-range-thumb {
+    border: none;
+    height: $slider-handle-height;
+    width: $slider-handle-height;
+    border-radius: $cf-radius;
+    background: $slider-handle;
+
+    &:hover,
+    &:focus {
+      background: $slider-handle-focus;
+    }
+  }
+
+  &::-ms-track {
+    height: $slider-track-height;
+    background: transparent;
+    border: none;
+    color: transparent;
+    border-radius: $cf-radius;
+  }
+
+  &::-ms-fill-lower {
+    background: transparent;
+  }
+
+  &::-ms-fill-upper {
+    background: transparent;
+  }
+
+  &::-ms-thumb {
+    border: none;
+    height: $slider-handle-height;
+    width: $slider-handle-height;
+    border-radius: $cf-radius;
+    background: $slider-handle;
+
+    &:hover,
+    &:focus {
+      background: $slider-handle-focus;
+    }
+  }
+}
+
+.cf-range-slider {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: $cf-radius;
+  background: $slider-bg;
+  position: relative;
+}
+
+.cf-range-slider--input {
+  flex: 1 0 0;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cf-range-slider--label {
+  font-size: 12px;
+  font-weight: $cf-font-weight--medium;
+  @extend %no-user-select;
+
+  &:first-of-type {
+    text-align: left;
+  }
+
+  &:last-of-type {
+    text-align: right;
+  }
+}
+
+.cf-range-slider--focus {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border: $cf-border solid $slider-track;
+  border-radius: $cf-radius;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  pointer-events: none;
+}
+
+.cf-input:hover + .cf-range-slider--focus {
+  border-color: $cf-input-border--hover;
+}
+
+.cf-input__focused + .cf-range-slider--focus,
+.cf-input__focused:hover + .cf-range-slider--focus {
+  box-shadow: 0 0 6px 0 $cf-input-border--focused;
+  border-color: $cf-input-border--focused;
+}
+
+/*
+  Size Modifiers
+  ------------------------------------------------------------------------------
+*/
+@mixin rangeSliderSizeModifier($fontSize, $height, $containerHeight, $padding) {
+  $slider-handle-mod-height: $height + 10px;
+  padding: 0 $padding;
+
+  &.cf-range-slider--input {
+    height: $containerHeight;
+  }
+
+  .cf-range-slider--label {
+    font-size: $fontSize;
+
+    &:first-of-type {
+      margin-right: $padding;
+    }
+    &:last-of-type {
+      margin-left: $padding;
+    }
+  }
+
+  input[type='range'] {
+    height: $height;
+    
+    &:focus {
+      box-shadow: none;
+    }
+
+    &::-webkit-slider-runnable-track {
+      height: $height;
+    }
+
+    &::-webkit-slider-thumb {
+      height: $slider-handle-mod-height;
+      width: $slider-handle-mod-height;
+      border-radius: 50%;
+      margin-top: -(($slider-handle-mod-height/2) - ($height/2));
+    }
+
+    &::-moz-range-track {
+      height: $height;
+    }
+
+    &::-moz-range-thumb {
+      height: $slider-handle-mod-height;
+      width: $slider-handle-mod-height;
+    }
+
+    &::-ms-track {
+      height: $height;
+    }
+
+    &::-ms-thumb {
+      height: $slider-handle-mod-height;
+      width: $slider-handle-mod-height;
+    }
+  }
+
+  &.cf-range-slider__fill {
+    ::-moz-range-progress {
+      height: $height;
+    }
+  }
+}
+
+.cf-range-slider__xs {
+  @include rangeSliderSizeModifier($cf-form-xs-font, $cf-marg-a, $cf-form-xs-height, $cf-form-xs-padding);
+}
+.cf-range-slider__sm {
+  @include rangeSliderSizeModifier($cf-form-sm-font, ($cf-marg-a + 2), $cf-form-sm-height, $cf-form-sm-padding);
+}
+.cf-range-slider__md {
+  @include rangeSliderSizeModifier($cf-form-md-font, $cf-marg-b, $cf-form-md-height, $cf-form-md-padding);
+}
+.cf-range-slider__lg {
+  @include rangeSliderSizeModifier($cf-form-lg-font, ($cf-marg-b + 2), $cf-form-lg-height, $cf-form-lg-padding);
+}
+
+/*
+  Color Modifiers
+  ------------------------------------------------------------------------------
+*/
+@mixin rangeSliderColorModifier($bg, $bgHover, $bgActive) {
+  input[type='range'] {
+    &::-webkit-slider-thumb {
+      background: $bg;
+
+      &:hover {
+        background: $bgHover;
+      }
+
+      &:focus,
+      &:active {
+        background: $bgActive;
+      }
+    }
+
+    &::-moz-range-thumb {
+      background: $bg;
+
+      &:hover {
+        background: $bgHover;
+      }
+
+      &:focus,
+      &:active {
+        background: $bgActive;
+      }
+    }
+  }
+}
+
+.cf-range-slider__default {
+  @include rangeSliderColorModifier($g7-graphite, $g8-storm, $g9-mountain);
+}
+.cf-range-slider__primary {
+  @include rangeSliderColorModifier($c-pool, $c-laser, $c-hydrogen);
+}
+.cf-range-slider__secondary {
+  @include rangeSliderColorModifier($c-star, $c-comet, $c-potassium);
+}
+.cf-range-slider__success {
+  @include rangeSliderColorModifier($c-rainforest, $c-honeydew, $c-wasabi);
+}
+.cf-range-slider__warning {
+  @include rangeSliderColorModifier($c-pineapple, $c-thunder, $c-daisy);
+}
+.cf-range-slider__danger {
+  @include rangeSliderColorModifier($c-curacao, $c-dreamsicle, $c-tungsten);
+}
+
+/*
+  Disabled
+  ------------------------------------------------------------------------------
+*/
+
+.cf-range-slider--input.cf-input__disabled {
+  border-color: $slider-track-disabled;
+
+  &:hover {
+    border-color: $slider-track-disabled;
+  }
+}
+
+.cf-range-slider__disabled .cf-range-slider--label {
+  color: $slider-disabled-text;
+  font-style: italic;
+}
+
+.cf-input__disabled {
+  input[type='range'] {
+    background: $slider-track-disabled;
+
+    &::-webkit-slider-thumb {
+      background: $slider-handle-disabled;
+
+      &:hover {
+        background: $slider-handle-disabled;
+      }
+
+      &:focus,
+      &:active {
+        background: $slider-handle-disabled;
+      }
+    }
+
+    &::-moz-range-thumb {
+      background: $slider-handle-disabled;
+
+      &:hover {
+        background: $slider-handle-disabled;
+      }
+
+      &:focus,
+      &:active {
+        background: $slider-handle-disabled;
+      }
+    }
+  }
+}

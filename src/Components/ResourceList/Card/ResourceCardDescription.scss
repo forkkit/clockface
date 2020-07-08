@@ -1,29 +1,29 @@
-@import "../../../Styles/modules.scss";
+@import "../../../Styles/variables.scss";
 
 /*
   Resource Editable Description
   ------------------------------------------------------------------------------
 */
 
-.resource-description {
+.cf-resource-description {
   width: 100%;
-  min-height: $form-xs-height;
+  min-height: $cf-form-xs-height;
 }
 
-.resource-description--preview,
-.input.resource-description--input > input {
-  font-size: $form-xs-font;
-  font-weight: 500;
+.cf-resource-description--preview,
+.cf-input.cf-resource-description--input > input {
+  font-size: $cf-form-xs-font;
+  font-weight: $cf-font-weight--medium;
   font-family: $cf-text-font;
 }
 
-.resource-description--preview,
-.resource-description--input {
+.cf-resource-description--preview,
+.cf-resource-description--input {
   position: relative;
   width: 100%;
 }
 
-.resource-description--preview {
+.cf-resource-description--preview {
   padding-top: $cf-marg-a;
   width: auto;
   display: inline-block;
@@ -34,7 +34,7 @@
   color: $g13-mist;
   transition: color 0.25s ease, background-color 0.25s ease,
     border-color 0.25s ease;
-  line-height: $form-xs-font + $cf-border;
+  line-height: $cf-form-xs-font + $cf-border;
 
   .cf-icon {
     position: relative;
@@ -55,24 +55,24 @@
     font-style: italic;
   }
 
-  .resource-description__editable &:hover {
+  .cf-resource-description__editable &:hover {
     cursor: text;
     color: $g20-white;
   }
 }
 
 /* Ensure placeholder text matches font weight of title */
-.input.resource-description--input > input {
+.cf-input.cf-resource-description--input > input {
   &::-webkit-input-placeholder {
-    font-weight: 500 !important;
+    font-weight: $cf-font-weight--medium !important;
   }
   &::-moz-placeholder {
-    font-weight: 500 !important;
+    font-weight: $cf-font-weight--medium !important;
   }
   &:-ms-input-placeholder {
-    font-weight: 500 !important;
+    font-weight: $cf-font-weight--medium !important;
   }
   &:-moz-placeholder {
-    font-weight: 500 !important;
+    font-weight: $cf-font-weight--medium !important;
   }
 }

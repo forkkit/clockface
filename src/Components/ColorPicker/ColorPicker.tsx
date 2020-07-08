@@ -1,16 +1,16 @@
 // Libraries
-import React, {Component, ChangeEvent} from 'react'
+import React, {forwardRef, ChangeEvent, FunctionComponent} from 'react'
 import classnames from 'classnames'
 import _ from 'lodash'
 
 // Components
 import {Input} from '../Inputs/Input'
 import {Button} from '../Button/Composed/Button'
-import {ColorPickerSwatch} from './ColorPickerSwatch'
+import {ColorPickerSwatch, ColorPickerSwatchRef} from './ColorPickerSwatch'
 import {FormElementError} from '../Form/FormElementError'
 
 // Constants
-import {influxColors, HEX_CODE_CHAR_LENGTH} from '../../Constants/colors'
+import {influxColors} from '../../Constants/colors'
 
 // Types
 import {
@@ -18,67 +18,108 @@ import {
   ButtonShape,
   ComponentStatus,
   Color,
-  StandardClassProps,
+  StandardFunctionProps,
+  ValidationFunction,
 } from '../../Types'
 
 // Utils
-import {validateHexCode} from '../../Utils/index'
+import {
+  validateHexCode,
+  VALID_HEX_LENGTH,
+  invalidHexCharacters,
+} from '../../Utils/hexCodeValidation'
 
 // Styles
 import './ColorPicker.scss'
 
-interface Props extends StandardClassProps {
+interface ColorPickerProps extends StandardFunctionProps {
   /** currently selected color */
   color: string
   /** Function to be called on color select */
   onChange: (color: string, status?: ComponentStatus) => void
   /** Array of colors to be displayed in color picker */
-  colors: Color[]
+  colors?: Color[]
   /** Prevent focus from leaving the input */
-  maintainInputFocus: boolean
+  maintainInputFocus?: boolean
   /** How many color swatches to render in each row */
-  swatchesPerRow: number
+  swatchesPerRow?: number
+  /** Enforces hexcode format by defult, pass in your own function to customize */
+  validationFunc?: ValidationFunction
+  /** Characters matching this expression will be stripped out of the value before being passed into onChange */
+  invalidChars?: RegExp
 }
 
-interface State {
-  errorMessage: string | null
-}
+export type ColorPickerRef = HTMLDivElement
 
-export class ColorPicker extends Component<Props, State> {
-  public static readonly displayName = 'ColorPicker'
-
-  public static defaultProps = {
-    colors: influxColors,
-    maintainInputFocus: false,
-    swatchesPerRow: 10,
-    testID: 'color-picker',
-  }
-
-  constructor(props: Props) {
-    super(props)
-
-    this.state = {
-      errorMessage: null,
-    }
-  }
-
-  render() {
-    const {
-      maintainInputFocus,
-      testID,
-      color,
-      colors,
-      swatchesPerRow,
+export const ColorPicker = forwardRef<ColorPickerSwatchRef, ColorPickerProps>(
+  (
+    {
       id,
-      style,
-    } = this.props
+      style = {width: '100%'},
+      color,
+      onChange,
+      className,
+      swatchesPerRow = 10,
+      colors = influxColors,
+      testID = 'color-picker',
+      maintainInputFocus = false,
+      validationFunc = validateHexCode,
+      invalidChars = invalidHexCharacters,
+    },
+    ref
+  ) => {
+    const errorMessage = validationFunc(color)
+
+    const colorPickerClass = classnames('cf-color-picker', {
+      [`${className}`]: className,
+    })
+
+    const inputStatus = !!errorMessage
+      ? ComponentStatus.Error
+      : ComponentStatus.Valid
+
+    const handleSwatchClick = (hex: string): void => {
+      onChange(hex, ComponentStatus.Valid)
+    }
+
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
+      let nextColor = e.target.value
+
+      if (invalidChars) {
+        nextColor = e.target.value.replace(invalidChars, '')
+      }
+
+      // This is not using the inputStatus variable becuase that information
+      // is stale and this outgoing information needs to be fresh in order
+      // for the stateful parent to correctly make decisions
+
+      const nextStatus = !!validationFunc(nextColor)
+        ? ComponentStatus.Error
+        : ComponentStatus.Valid
+
+      onChange(nextColor, nextStatus)
+    }
+
+    const handleInputBlur = (e: ChangeEvent<HTMLInputElement>): void => {
+      if (maintainInputFocus) {
+        e.target.focus()
+      }
+    }
+
+    const handleRandomizeColor = (): void => {
+      const randomColor = _.sample(colors)
+      const hex = _.get(randomColor, 'hex') || ''
+
+      onChange(hex, ComponentStatus.Valid)
+    }
 
     return (
       <div
-        className={this.className}
+        className={colorPickerClass}
         data-testid={testID}
         id={id}
         style={style}
+        ref={ref}
       >
         <div className="cf-color-picker--swatches">
           {colors &&
@@ -88,7 +129,7 @@ export class ColorPicker extends Component<Props, State> {
                 key={color.name}
                 hex={color.hex}
                 name={color.name}
-                onClick={this.handleSwatchClick}
+                onClick={handleSwatchClick}
                 testID={testID}
                 swatchesPerRow={swatchesPerRow}
                 swatchesCount={colors.length}
@@ -100,124 +141,54 @@ export class ColorPicker extends Component<Props, State> {
             className="cf-color-picker--input"
             placeholder="#000000"
             value={color}
-            onChange={this.handleInputChange}
-            maxLength={HEX_CODE_CHAR_LENGTH}
-            onBlur={this.handleInputBlur}
+            onChange={handleInputChange}
+            maxLength={VALID_HEX_LENGTH}
+            onBlur={handleInputBlur}
             autoFocus={maintainInputFocus}
-            status={this.inputStatus}
+            status={inputStatus}
             testID={`${testID}--input`}
           />
-          {this.colorPreview}
+          <ColorPreview color={color} />
           <Button
             icon={IconFont.Refresh}
             shape={ButtonShape.Square}
-            onClick={this.handleRandomizeColor}
+            onClick={handleRandomizeColor}
             titleText="I'm feeling lucky"
             testID={`${testID}--randomize`}
           />
         </div>
-        {this.errorMessage}
+        <ErrorMessage testID={testID} errorMessage={errorMessage} />
       </div>
     )
   }
+)
 
-  private get className(): string {
-    const {className} = this.props
+ColorPicker.displayName = 'ColorPicker'
 
-    return classnames('cf-color-picker', {[`${className}`]: className})
-  }
-
-  private get inputStatus(): ComponentStatus {
-    const {errorMessage} = this.state
-
-    return errorMessage ? ComponentStatus.Error : ComponentStatus.Valid
-  }
-
-  private handleSwatchClick = (hex: string): void => {
-    const {onChange} = this.props
-
-    this.setState({errorMessage: null})
-    onChange(hex, ComponentStatus.Valid)
-  }
-
-  private handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const {onChange} = this.props
-    const acceptedChars = [
-      '#',
-      'a',
-      'b',
-      'c',
-      'd',
-      'e',
-      'f',
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-    ]
-
-    const trimmedValue = e.target.value.trim()
-    const cleanedValue = trimmedValue
-      .split('')
-      .filter(char => acceptedChars.includes(char.toLowerCase()))
-      .join('')
-
-    const errorMessage = validateHexCode(cleanedValue)
-    const status = errorMessage ? ComponentStatus.Error : ComponentStatus.Valid
-
-    this.setState({errorMessage})
-    onChange(cleanedValue, status)
-  }
-
-  private handleInputBlur = (e: ChangeEvent<HTMLInputElement>) => {
-    const {maintainInputFocus} = this.props
-
-    if (maintainInputFocus) {
-      e.target.focus()
-    }
-  }
-
-  private handleRandomizeColor = (): void => {
-    const {onChange, colors} = this.props
-    const randomColor = _.sample(colors)
-    const hex = _.get(randomColor, 'hex') || ''
-
-    this.setState({errorMessage: null})
-    onChange(hex, ComponentStatus.Valid)
-  }
-
-  private get errorMessage(): JSX.Element | undefined {
-    const {testID} = this.props
-    const {errorMessage} = this.state
-
-    if (errorMessage) {
-      return (
-        <div
-          className="cf-color-picker--error"
-          data-testid={`${testID}--error`}
-        >
-          <FormElementError message={errorMessage} />
-        </div>
-      )
-    }
-
-    return
-  }
-
-  private get colorPreview(): JSX.Element {
-    const {color} = this.props
-
-    return (
-      <div
-        className="cf-color-picker--selected"
-        style={{backgroundColor: color}}
-      />
-    )
-  }
+const ColorPreview: FunctionComponent<{color: string}> = ({color}) => {
+  return (
+    <div
+      className="cf-color-picker--selected"
+      style={{backgroundColor: color}}
+    />
+  )
 }
+
+ColorPreview.displayName = 'ColorPickerPreview'
+
+const ErrorMessage: FunctionComponent<{
+  testID: string
+  errorMessage: string | null
+}> = ({testID, errorMessage}) => {
+  if (!errorMessage) {
+    return null
+  }
+
+  return (
+    <div className="cf-color-picker--error" data-testid={`${testID}--error`}>
+      <FormElementError message={errorMessage} />
+    </div>
+  )
+}
+
+ErrorMessage.displayName = 'ColorPickerError'

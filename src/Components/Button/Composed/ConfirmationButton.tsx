@@ -1,158 +1,179 @@
 // Libraries
-import React, {Component, createRef} from 'react'
+import React, {FunctionComponent, useRef, RefObject, CSSProperties} from 'react'
 
 // Components
-import {Button} from './Button'
-import {Popover} from '../../Popover/Base/Popover'
+import {Button, ButtonProps} from './Button'
+import {Popover} from '../../Popover'
 
 // Styles
 import './ConfirmationButton.scss'
 
 // Types
-import {Props as ButtonProps} from './Button'
 import {
   Omit,
   ComponentSize,
   ButtonShape,
   ComponentStatus,
   ComponentColor,
-  PopoverType,
+  Appearance,
 } from '../../../Types'
 
-interface Props
-  extends Omit<ButtonProps, 'onClick' | 'active' | 'type' | 'refObject'> {
+export interface ConfirmationButtonProps
+  extends Omit<
+    ButtonProps,
+    | 'onClick'
+    | 'active'
+    | 'type'
+    | 'onMouseEnter'
+    | 'onMouseLeave'
+    | 'onMouseOver'
+    | 'onMouseOut'
+  > {
   /** Text to appear in confirmation popover */
   confirmationLabel: string
   /** Text to appear in confirmation button */
   confirmationButtonText: string
   /** Color of confirmation button */
-  confirmationButtonColor: ComponentColor
+  confirmationButtonColor?: ComponentColor
   /** Popover dialog color */
-  popoverColor: ComponentColor
+  popoverColor?: ComponentColor
   /** Means of applying color to popover */
-  popoverType: PopoverType
+  popoverAppearance?: Appearance
+  /** Allows customization of Popover */
+  popoverClassName?: string
+  /** Allows customization of Popover */
+  popoverStyle?: CSSProperties
+  /** Callback function fired when state changes to "show" */
+  onShow?: () => void
+  /** Callback function fired when state changes to "hide" */
+  onHide?: () => void
   /** Function to call when confirmation is clicked, passes 'value' prop in */
   onConfirm: (returnValue?: any) => void
   /** Optional value to have passed back via onConfirm */
   returnValue?: any
 }
 
-export class ConfirmationButton extends Component<Props> {
-  public static readonly displayName = 'ConfirmationButton'
+export const ConfirmationButton: FunctionComponent<ConfirmationButtonProps> = ({
+  id,
+  icon,
+  text,
+  style,
+  onHide,
+  onShow,
+  tabIndex,
+  className,
+  titleText,
+  onConfirm,
+  returnValue,
+  popoverStyle,
+  popoverClassName,
+  confirmationLabel,
+  confirmationButtonText,
+  size = ComponentSize.Small,
+  placeIconAfterText = false,
+  shape = ButtonShape.Default,
+  testID = 'confirmation-button',
+  color = ComponentColor.Default,
+  popoverAppearance = Appearance.Solid,
+  status = ComponentStatus.Default,
+  popoverColor = ComponentColor.Default,
+  confirmationButtonColor = ComponentColor.Danger,
+}) => {
+  const triggerRef: RefObject<HTMLButtonElement> = useRef(null)
 
-  public static defaultProps = {
-    confirmationButtonColor: ComponentColor.Danger,
-    testID: 'confirmation-button',
-    color: ComponentColor.Default,
-    size: ComponentSize.Small,
-    shape: ButtonShape.Default,
-    status: ComponentStatus.Default,
-    placeIconAfterText: false,
-    popoverColor: ComponentColor.Default,
-    popoverType: PopoverType.Solid,
-  }
+  const isDisabled =
+    status === ComponentStatus.Disabled || status === ComponentStatus.Loading
 
-  private triggerRef = createRef<HTMLButtonElement>()
-
-  public render() {
-    const {
-      placeIconAfterText,
-      confirmationLabel,
-      popoverColor,
-      popoverType,
-      titleText,
-      className,
-      tabIndex,
-      testID,
-      status,
-      color,
-      shape,
-      style,
-      text,
-      icon,
-      size,
-      id,
-    } = this.props
-
-    return (
-      <>
-        <Popover
-          color={popoverColor}
-          type={popoverType}
-          enableDefaultStyles={false}
-          contents={onHide => (
-            <div className="cf-confirmation-button--container">
-              {confirmationLabel && (
-                <span
-                  className="cf-confirmation-button--label"
-                  data-testid={`${testID}--confirmation-label`}
-                >
-                  {confirmationLabel}
-                </span>
-              )}
-              {this.renderConfirm(onHide)}
-            </div>
-          )}
-          testID={`${testID}--popover`}
-          disabled={this.isDisabled}
-          style={style}
-          triggerRef={this.triggerRef}
-        />
-        <Button
-          className={className}
-          placeIconAfterText={placeIconAfterText}
-          titleText={titleText || text}
-          refObject={this.triggerRef}
-          tabIndex={tabIndex}
-          testID={`${testID}--button`}
-          status={status}
-          color={color}
-          shape={shape}
-          text={text}
-          size={size}
-          icon={icon}
-          id={id}
-        />
-      </>
-    )
-  }
-
-  private get isDisabled(): boolean {
-    const {status} = this.props
-
-    if (
-      status === ComponentStatus.Disabled ||
-      status === ComponentStatus.Loading
-    ) {
-      return true
-    }
-
-    return false
-  }
-
-  private renderConfirm = (onHide: (() => void) | undefined): JSX.Element => {
-    const {
-      confirmationButtonText,
-      confirmationButtonColor,
-      returnValue,
-      onConfirm,
-      testID,
-      size,
-    } = this.props
-
-    const handleClick = (): void => {
-      onConfirm(returnValue)
-      onHide && onHide()
-    }
-
-    return (
+  return (
+    <>
+      <Popover
+        className={popoverClassName}
+        style={popoverStyle}
+        color={popoverColor}
+        appearance={popoverAppearance}
+        enableDefaultStyles={false}
+        onShow={onShow}
+        onHide={onHide}
+        contents={onHide => (
+          <ConfirmationContents
+            testID={testID}
+            onHide={onHide}
+            onConfirm={onConfirm}
+            returnValue={returnValue}
+            confirmationLabel={confirmationLabel}
+            confirmationButtonText={confirmationButtonText}
+            confirmationButtonColor={confirmationButtonColor}
+          />
+        )}
+        testID={`${testID}--popover`}
+        disabled={isDisabled}
+        triggerRef={triggerRef}
+      />
       <Button
-        data-testid={`${testID}--confirm-button`}
+        className={className}
+        placeIconAfterText={placeIconAfterText}
+        titleText={titleText || text}
+        tabIndex={tabIndex}
+        testID={`${testID}--button`}
+        ref={triggerRef}
+        status={status}
+        color={color}
+        style={style}
+        shape={shape}
+        text={text}
+        size={size}
+        icon={icon}
+        id={id}
+      />
+    </>
+  )
+}
+
+ConfirmationButton.displayName = 'ConfirmationButton'
+
+const ConfirmationContents: FunctionComponent<{
+  onHide: (() => void) | undefined
+  returnValue?: any
+  onConfirm: (returnValue?: any) => void
+  confirmationLabel: string
+  testID: string
+  confirmationButtonText: string
+  confirmationButtonColor: ComponentColor
+  size?: ComponentSize
+}> = ({
+  onHide,
+  onConfirm,
+  returnValue,
+  confirmationLabel,
+  testID,
+  confirmationButtonText,
+  confirmationButtonColor,
+  size,
+}) => {
+  const handleClick = (): void => {
+    onConfirm(returnValue)
+    !!onHide && onHide()
+  }
+
+  return (
+    <div className="cf-confirmation-button--container">
+      {confirmationLabel && (
+        <span
+          className="cf-confirmation-button--label"
+          data-testid={`${testID}--confirmation-label`}
+        >
+          {confirmationLabel}
+        </span>
+      )}
+      <Button
+        testID={`${testID}--confirm-button`}
         onClick={handleClick}
         text={confirmationButtonText}
         color={confirmationButtonColor}
         size={size}
       />
-    )
-  }
+    </div>
+  )
 }
+
+ConfirmationContents.displayName = 'ConfirmationButtonContents'

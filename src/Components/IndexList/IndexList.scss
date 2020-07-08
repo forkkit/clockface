@@ -1,97 +1,131 @@
-@import '../../Styles/modules';
+@import '../../Styles/variables';
 
 /*
   Index List Styles
   ------------------------------------------------------------------------------
 */
 
-.index-list {
+$cf-index-list--row-height: 52px;
+$cf-index-list--sort-text: $g11-sidewalk;
+
+.cf-index-list {
   border: 0;
   border-collapse: collapse;
   width: 100%;
 }
 
-.index-list--header-cell {
+.cf-index-list--header-cell {
   @include no-user-select();
   text-transform: uppercase;
   letter-spacing: 0.03em;
   padding: 0 13px;
-  font-size: $form-md-font;
-  font-weight: 600;
-  color: $g11-sidewalk;
+  font-size: $cf-form-md-font;
+  font-weight: $cf-font-weight--medium;
+  color: $g9-mountain;
   white-space: nowrap;
   height: 52px;
 }
 
-.index-list--cell {
+.cf-index-list--cell {
   height: calc(100% - #{$cf-border});
   padding: $cf-marg-a + $cf-marg-b;
-  background-color: $g3-castle;
-  font-size: $form-md-font;
-  font-weight: 500;
-  color: $g13-mist;
+  background-color: $cf-card-background--default;
+  font-size: $cf-form-md-font;
+  font-weight: $cf-font-weight--medium;
+  color: $cf-card-text--default;
   display: flex;
   align-items: center;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 // Alignment modifiers
-.index-list--align-left {
+.cf-index-list--align-left {
   text-align: left;
 }
-.index-list--align-left .index-list--cell {
+.cf-index-list--align-left .cf-index-list--cell {
   justify-content: flex-start;
 }
 
-.index-list--align-right {
+.cf-index-list--align-right {
   text-align: right;
 }
-.index-list--align-right .index-list--cell {
+.cf-index-list--align-right .cf-index-list--cell {
   justify-content: flex-end;
 }
 
-.index-list--align-center {
+.cf-index-list--align-center {
   text-align: center;
 }
-.index-list--align-center .index-list--cell {
+.cf-index-list--align-center .cf-index-list--cell {
   justify-content: center;
 }
 
 // TD Style
-.index-list--row-cell {
+.cf-index-list--row-cell {
   position: relative;
-  height: 52px;
+  height: $cf-index-list--row-height;
 
-  &:first-child .index-list--cell {
+  &:first-child .cf-index-list--cell {
     border-radius: $cf-radius 0 0 $cf-radius;
   }
 
-  &:last-child .index-list--cell {
+  &:last-child .cf-index-list--cell {
     border-radius: 0 $cf-radius $cf-radius 0;
   }
 }
 
+// Row Style
+.cf-index-list--row {
+  @extend %panel-shadow;
+}
+
 // Row hover State
-.index-list--row:hover .index-list--cell {
-  background-color: $g4-onyx;
-  color: $g18-cloud;
+.cf-index-list--row:hover .cf-index-list--cell {
+  background-color: $cf-card-background--hover;
+  color: $cf-card-text--hover;
 }
 
 // Show cell contents on row hover
-.index-list--show-hover .index-list--cell > * {
+.cf-index-list--show-hover .cf-index-list--cell > * {
   transition: opacity 0.25s ease;
   opacity: 0;
 }
-.index-list--row:hover .index-list--show-hover .index-list--cell > * {
+.cf-index-list--row:hover .cf-index-list--show-hover .cf-index-list--cell > * {
   opacity: 1;
 }
 
-// Row Disabled State
-.index-list--row.index-list--row-disabled
-  .index-list--row-cell
-  .index-list--cell {
-  background-color: rgba($g3-castle, 0.5);
-  color: $g9-mountain;
+/*
+  Depth Styling
+  ------------------------------------------------------------------------------
+*/
+
+.cf-index-list--row__nested {
+  .cf-index-list--cell {
+    background-color: $g4-onyx;
+  }
+  &:hover .cf-index-list--cell {
+    background-color: $g5-pepper;
+  }
+  &.cf-index-list--row__disabled .cf-index-list--cell {
+    background-color: rgba($g4-onyx, 0.5);
+  }
+  &.cf-index-list--row__disabled:hover .cf-index-list--cell {
+    background-color: rgba($g4-onyx, 0.7);
+  }
+  .cf-index-list--empty-cell {
+    background-color: rgba($g4-onyx, 0.5);
+  }
+}
+
+/*
+  Row Disabled State
+  ------------------------------------------------------------------------------
+*/
+.cf-index-list--row.cf-index-list--row__disabled
+  .cf-index-list--row-cell
+  .cf-index-list--cell {
+  background-color: $cf-card-background--disabled;
+  color: $cf-card-text--disabled;
   font-style: italic;
 
   a:link,
@@ -104,11 +138,11 @@
 }
 
 // Row Disabled Hover State
-.index-list--row.index-list--row-disabled:hover
-  .index-list--row-cell
-  .index-list--cell {
-  background-color: rgba($g3-castle, 0.7);
-  color: $g15-platinum;
+.cf-index-list--row.cf-index-list--row__disabled:hover
+  .cf-index-list--row-cell
+  .cf-index-list--cell {
+  background-color: $cf-card-background--disabled;
+  color: $cf-card-text--disabled;
 
   a:link,
   a:visited,
@@ -119,40 +153,13 @@
 }
 
 // Empty state
-.index-list--empty-cell {
-  background-color: rgba($g3-castle, 0.5);
+.cf-index-list--empty-cell {
+  background-color: $cf-card-background--disabled;
   border-radius: $cf-radius;
   display: flex;
   align-content: center;
   justify-content: center;
-  color: $empty-state-text;
-}
-
-/*
-  Depth Styling
-  ------------------------------------------------------------------------------
-*/
-
-.tabs--contents,
-// TODO: Remove this .tabbed-page rule when the component is phased out
-.tabbed-page {
-  .index-list--cell {
-    background-color: $g4-onyx;
-  }
-  .index-list--row:hover .index-list--cell {
-    background-color: $g5-pepper;
-  }
-  .index-list--row-cell.index-list--row-disabled .index-list--cell {
-    background-color: rgba($g4-onyx, 0.5);
-  }
-  .index-list--row:hover
-    .index-list--row-cell.index-list--row-disabled
-    .index-list--cell {
-    background-color: rgba($g4-onyx, 0.7);
-  }
-  .index-list--empty-cell {
-    background-color: rgba($g4-onyx, 0.5);
-  }
+  color: $cf-empty-state-text;
 }
 
 /*
@@ -160,7 +167,7 @@
   ------------------------------------------------------------------------------
 */
 
-.index-list--sort-arrow {
+.cf-index-list--sort-arrow {
   display: inline-block;
   vertical-align: middle;
   width: 20px;
@@ -179,7 +186,7 @@
   }
 }
 
-.index-list--header-cell.index-list--sortable {
+.cf-index-list--header-cell.cf-index-list--sortable {
   transition: color 0.25s ease;
 
   &:hover {
@@ -188,17 +195,17 @@
   }
 }
 
-.index-list--header-cell.index-list--sort-ascending,
-.index-list--header-cell.index-list--sort-descending {
-  color: $g17-whisper;
+.cf-index-list--header-cell.cf-index-list--sort-ascending,
+.cf-index-list--header-cell.cf-index-list--sort-descending {
+  color: $cf-index-list--sort-text;
 }
 
-.index-list--sort-ascending .index-list--sort-arrow {
+.cf-index-list--sort-ascending .cf-index-list--sort-arrow {
   opacity: 1;
   transform: rotate(180deg);
 }
 
-.index-list--sort-descending .index-list--sort-arrow {
+.cf-index-list--sort-descending .cf-index-list--sort-arrow {
   opacity: 1;
   transform: rotate(00deg);
 }
@@ -208,10 +215,10 @@
   ------------------------------------------------------------------------------
 */
 
-.index-list--labels {
+.cf-index-list--labels {
   margin-left: $cf-marg-b;
 }
 
-.index-list--row-cell .index-list--cell a {
+.cf-index-list--row-cell .cf-index-list--cell a {
   white-space: nowrap;
 }

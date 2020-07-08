@@ -1,52 +1,32 @@
 // Libraries
-import React, {Component, CSSProperties} from 'react'
+import React, {forwardRef} from 'react'
 import classnames from 'classnames'
 
 // Types
-import {StandardClassProps, InfluxColors, ComponentSize} from '../../Types'
+import {StandardFunctionProps} from '../../Types'
 
-interface Props extends StandardClassProps {
-  /** Padding of contents */
-  padding: ComponentSize
-  /** Background color, should match color of Tab */
-  backgroundColor: InfluxColors | string
-}
+export interface TabContentsProps extends StandardFunctionProps {}
 
-export class TabContents extends Component<Props> {
-  public static readonly displayName = 'TabContents'
+export type TabContentsRef = HTMLDivElement
 
-  public static defaultProps = {
-    testID: 'tabs--tab-contents',
-    backgroundColor: InfluxColors.Pepper,
-  }
-
-  public render() {
-    const {testID, id, children} = this.props
+export const TabContents = forwardRef<TabContentsRef, TabContentsProps>(
+  ({id, style, children, className, testID = 'tabs--tab-contents'}, ref) => {
+    const tabContentsClass = classnames('cf-tabs--tab-contents', {
+      [`${className}`]: className,
+    })
 
     return (
       <div
-        className={this.className}
+        ref={ref}
+        className={tabContentsClass}
         data-testid={testID}
         id={id}
-        style={this.style}
+        style={style}
       >
         {children}
       </div>
     )
   }
+)
 
-  private get className(): string {
-    const {className, padding} = this.props
-
-    return classnames('cf-tabs--tab-contents', {
-      [`cf-tabs--tab-contents__${padding}`]: padding,
-      [`${className}`]: className,
-    })
-  }
-
-  private get style(): CSSProperties | undefined {
-    const {backgroundColor, style} = this.props
-
-    return {backgroundColor, ...style}
-  }
-}
+TabContents.displayName = 'TabContents'

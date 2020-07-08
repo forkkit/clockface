@@ -1,0 +1,158 @@
+@import '../../../Styles/variables';
+
+/*
+  Funnel Page
+  ------------------------------------------------------------------------------
+*/
+
+$funnel-page--base-font: 14px;
+$funnel-page--base-font--large: 16px;
+$funnel-page--tiny-gutter: $cf-marg-b;
+$funnel-page--gutter: $cf-marg-d;
+$funnel-page--gradient-a-z: 0;
+$funnel-page--gradient-b-z: $funnel-page--gradient-a-z + 1;
+$funnel-page--gradient-c-z: $funnel-page--gradient-b-z + 1;
+$funnel-page--graphic-z: $funnel-page--gradient-c-z + 1;
+$funnel-page--scroll-z: $funnel-page--graphic-z + 1;
+
+.cf-funnel-page {
+  width: 100%;
+  height: 100%;
+  flex: 1 0 0;
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.cf-funnel-page--scroll {
+  z-index: $funnel-page--scroll-z;
+}
+
+.cf-funnel-page--gradient,
+.cf-funnel-page--graphic {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: $funnel-page--gradient-a-z;
+}
+
+.cf-funnel-page--gradient + .cf-funnel-page--gradient {
+  z-index: $funnel-page--gradient-b-z;
+}
+
+.cf-funnel-page--gradient + .cf-funnel-page--gradient + .cf-funnel-page--gradient {
+  z-index: $funnel-page--gradient-c-z;
+}
+
+.cf-funnel-page--content {
+  margin: 0 auto;
+  width: 100%;
+  max-width: $cf-page--funnel-max-width;
+  text-align: center;
+  padding: $funnel-page--tiny-gutter;
+  font-size: $funnel-page--base-font;
+  color: $c-neutrino;
+
+  .cf-funnel-page--title,
+  .cf-funnel-page--title.cf-heading {
+    font-weight: $cf-font-weight--regular;
+    color: $g20-white;
+    font-size: 1.75em;
+    margin-top: 1em;
+    margin-bottom: 0em;
+  }
+
+  .cf-funnel-page--subtitle,
+  .cf-funnel-page--subtitle.cf-heading {
+    font-weight: $cf-font-weight--medium;
+    font-size: 1.125em;
+    margin: 1.25em 0;
+  }
+
+  .cf-funnel-page--panel-title,
+  .cf-funnel-page--panel-title.cf-heading {
+    font-size: 1.125em;
+    font-weight: $cf-font-weight--medium;
+  }
+
+  .cf-panel {
+    margin-bottom: $cf-marg-a;
+  }
+
+  .cf-cta-button {
+    margin-bottom: $cf-marg-d;
+  }
+
+  strong {
+    color: $g20-white;
+    font-weight: $cf-font-weight--medium;
+  }
+}
+
+@media screen and (min-width: $cf-grid--breakpoint-md) {
+  .cf-funnel-page--content {
+    font-size: $funnel-page--base-font--large;
+    padding: $funnel-page--gutter;
+  }
+}
+
+.cf-funnel-page--logo {
+  width: 100%;
+  display: flex;
+}
+
+/*
+  Funnel Page Footer
+  ------------------------------------------------------------------------------
+*/
+
+.cf-funnel-page--footer {
+  width: 100%;
+  background-color: $g2-kevlar;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: $cf-marg-c;
+    transform: translateY(-100%);
+    pointer-events: none;
+    z-index: 5;
+    @include gradient-v(rgba($g0-obsidian, 0), rgba($g0-obsidian, 0.25));
+  }
+}
+
+.cf-funnel-page--footer-section,
+.cf-funnel-page--footer-container {
+  display: flex;
+  justify-content: center;
+}
+
+.cf-funnel-page--footer-container {
+  width: 100%;
+  padding: 0 $funnel-page--tiny-gutter;
+  max-width: $cf-page--funnel-max-width;
+}
+
+@media screen and (min-width: $cf-grid--breakpoint-md) {
+  .cf-funnel-page--footer-container {
+    padding: 0 $funnel-page--gutter;
+  }
+}
+
+/*
+  Funnel Page Graphic
+  ------------------------------------------------------------------------------
+*/
+
+.cf-funnel-page--graphic {
+  @include funnel-page-background;
+}

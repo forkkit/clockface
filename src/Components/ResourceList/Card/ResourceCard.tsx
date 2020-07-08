@@ -1,124 +1,83 @@
 // Libraries
-import React, {PureComponent} from 'react'
+import React, {forwardRef} from 'react'
 import classnames from 'classnames'
 
 // Components
-import {ResourceCardName} from './ResourceCardName'
-import {ResourceCardEditableName} from './ResourceCardEditableName'
-import {ResourceCardDescription} from './ResourceCardDescription'
-import {ResourceCardEditableDescription} from './ResourceCardEditableDescription'
+import {FlexBox, FlexBoxProps} from '../../FlexBox'
 
 // Types
-import {StandardClassProps} from '../../../Types'
+import {Omit, FlexDirection, ComponentSize, AlignItems} from '../../../Types'
 
 // Styles
 import './ResourceCard.scss'
 
-interface Props extends StandardClassProps {
-  /** Renders the name component in its designated place */
-  name: JSX.Element
+export interface ResourceCardProps
+  extends Omit<FlexBoxProps, 'stretchToFitWidth' | 'stretchToFitHeight'> {
   /** Renders the card with disabled styles */
   disabled?: boolean
-  /** Renders the description component in its designated place */
-  description?: JSX.Element
-  /** Renders the labelling components in their designated place */
-  labels?: JSX.Element
-  /** Renders horizontal list of meta items in their designated place  */
-  metaData?: JSX.Element[]
   /** Renders the context menu component in its designated place */
   contextMenu?: JSX.Element
-  /** Renders the toggle component in its designated place */
-  toggle?: JSX.Element
+  /** Controls the interaction style for the contextMenu */
+  contextMenuInteraction?: 'alwaysVisible' | 'showOnHover'
+  /** If true the card will highlight on mouse over */
+  highlightOnHover?: boolean
 }
 
-export class ResourceCard extends PureComponent<Props> {
-  public static readonly displayName = 'ResourceCard'
+export type ResourceCardRef = HTMLDivElement
 
-  public static defaultProps = {
-    testID: 'resource-card',
-  }
+export const ResourceCardRoot = forwardRef<ResourceCardRef, ResourceCardProps>(
+  (
+    {
+      id,
+      style,
+      testID = 'resource-card',
+      margin = ComponentSize.Small,
+      children,
+      disabled,
+      direction = FlexDirection.Column,
+      className,
+      alignItems = AlignItems.Stretch,
+      contextMenu,
+      justifyContent,
+      highlightOnHover = true,
+      contextMenuInteraction = 'showOnHover',
+    },
+    ref
+  ) => {
+    const resourceCardClass = classnames('cf-resource-card', {
+      'cf-resource-card__highlight': highlightOnHover,
+      'cf-resource-card__disabled': disabled,
+      'cf-resource-card__context-hover':
+        contextMenuInteraction === 'showOnHover',
+      [`${className}`]: className,
+    })
 
-  public static Name = ResourceCardName
-  public static EditableName = ResourceCardEditableName
-  public static Description = ResourceCardDescription
-  public static EditableDescription = ResourceCardEditableDescription
-
-  public render() {
-    const {description, labels, children, testID, name, id, style} = this.props
+    const contextMenuElement = contextMenu && (
+      <div className="cf-resource-card--context-menu">{contextMenu}</div>
+    )
 
     return (
       <div
-        className={this.className}
-        data-testid={testID}
         id={id}
+        ref={ref}
         style={style}
+        className={resourceCardClass}
+        data-testid={testID}
       >
-        {this.toggle}
-        <div className="cf-resource-card--contents">
-          <div className="cf-resource-card--row">{name}</div>
-          {description ? (
-            <div className="cf-resource-card--row">{description}</div>
-          ) : null}
-          {this.formattedMetaData}
-          {labels ? (
-            <div className="cf-resource-card--row">{labels}</div>
-          ) : null}
-          {children ? (
-            <div className="cf-resource-card--row">{children}</div>
-          ) : null}
-        </div>
-        {this.contextMenu}
+        <FlexBox.FlexBox
+          margin={margin}
+          direction={direction}
+          alignItems={alignItems}
+          justifyContent={justifyContent}
+          stretchToFitHeight={true}
+          stretchToFitWidth={true}
+        >
+          {children}
+        </FlexBox.FlexBox>
+        {contextMenuElement}
       </div>
     )
   }
+)
 
-  private get className(): string {
-    const {disabled, className} = this.props
-
-    return classnames('cf-resource-card', {
-      'cf-resource-card__disabled': disabled,
-      [`${className}`]: className,
-    })
-  }
-
-  private get toggle(): JSX.Element | undefined {
-    const {toggle} = this.props
-
-    if (toggle) {
-      return <div className="cf-resource-card--toggle">{toggle}</div>
-    }
-
-    return
-  }
-
-  private get formattedMetaData(): JSX.Element | undefined {
-    const {metaData} = this.props
-
-    if (metaData) {
-      return (
-        <div className="cf-resource-card--row cf-resource-card--meta">
-          {React.Children.map(metaData, (metaItem: JSX.Element) => (
-            <div
-              className="cf-resource-card--meta-item"
-              data-testid="cf-resource-card--meta-item"
-            >
-              {metaItem}
-            </div>
-          ))}
-        </div>
-      )
-    }
-
-    return
-  }
-
-  private get contextMenu(): JSX.Element | undefined {
-    const {contextMenu} = this.props
-
-    if (contextMenu) {
-      return <div className="cf-resource-card--context-menu">{contextMenu}</div>
-    }
-
-    return
-  }
-}
+ResourceCardRoot.displayName = 'ResourceCard'

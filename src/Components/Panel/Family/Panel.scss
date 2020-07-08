@@ -1,0 +1,159 @@
+@import '../../../Styles/variables';
+
+/*
+   Panels
+   -----------------------------------------------------------------------------
+*/
+
+.cf-panel {
+  border-radius: $cf-radius;
+  position: relative;
+  @extend %panel-shadow;
+}
+
+.cf-panel--body {
+  width: 100%;
+  
+  > *:first-child {
+    margin-top: 0;
+  }
+  
+  > *:last-child {
+    margin-bottom: 0;
+  }
+  
+  .cf-panel--header + & {
+    padding-top: 0;
+  }
+}
+
+.cf-panel--header {
+  position: relative;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    line-height: 1em;
+    @extend %no-user-select;
+  }
+
+  &.cf-flex-box__row {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  &.cf-flex-box__column {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+}
+
+.cf-panel--footer {
+  border-radius: 0 0 $cf-radius $cf-radius;
+  border-top: $cf-border solid rgba($g20-white, 0.04);
+}
+
+/*
+  Size Modifiers
+  ------------------------------------------------------------------------------
+*/
+@mixin panelHeaderBodySizeModifier($padding) {
+  padding: $padding * 2;
+}
+
+.cf-panel--header__xs,
+.cf-panel--body__xs {
+  @include panelHeaderBodySizeModifier($cf-form-xs-padding);
+}
+.cf-panel--header__sm,
+.cf-panel--body__sm {
+  @include panelHeaderBodySizeModifier($cf-form-sm-padding);
+}
+.cf-panel--header__md,
+.cf-panel--body__md {
+  @include panelHeaderBodySizeModifier($cf-form-md-padding);
+}
+.cf-panel--header__lg,
+.cf-panel--body__lg {
+  @include panelHeaderBodySizeModifier($cf-form-lg-padding);
+}
+
+@mixin panelFooterSizeModifier($padding, $fontSize) {
+  padding: $padding ($padding * 2);
+}
+
+.cf-panel--footer__xs {
+  @include panelFooterSizeModifier($cf-form-xs-padding, $cf-form-xs-font);
+}
+.cf-panel--footer__sm {
+  @include panelFooterSizeModifier($cf-form-sm-padding, $cf-form-sm-font);
+}
+.cf-panel--footer__md {
+  @include panelFooterSizeModifier($cf-form-md-padding, $cf-form-md-font);
+}
+.cf-panel--footer__lg {
+  @include panelFooterSizeModifier($cf-form-lg-padding, $cf-form-lg-font);
+}
+
+/*
+  Contrast Text Modifiers
+  ------------------------------------------------------------------------------
+*/
+
+.cf-panel__dark-text {
+  .cf-panel--header,
+  .cf-panel--body,
+  .cf-panel--footer {
+    color: rgba($g2-kevlar, 0.75);
+  }
+}
+
+.cf-panel__light-text {
+  .cf-panel--header,
+  .cf-panel--body,
+  .cf-panel--footer {
+    color: rgba($g20-white, 0.75);
+  }
+}
+
+/*
+  Horizontal Rules directly inside Panels
+  ------------------------------------------------------------------------------
+*/
+
+.cf-panel--body hr {
+  width: 100%;
+  margin: $cf-marg-c 0;
+}
+
+/*
+   Bordered Panels
+   -----------------------------------------------------------------------------
+*/
+
+.cf-panel__bordered {
+  button.cf-dismiss-button {
+    top: -$cf-border;
+    right: -$cf-border;
+  }
+}

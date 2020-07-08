@@ -1,6 +1,5 @@
-@import '../src/Styles/modules';
+@import '../src/Styles/variables';
 @import '../src/Styles/shared';
-
 
 html,
 body.sb-show-main {
@@ -20,7 +19,7 @@ body.sb-show-main {
   }
 
   .props-table--prop {
-    font-weight: 700;
+    font-weight: $cf-font-weight--bold;
   }
 
   th {
@@ -41,11 +40,12 @@ body.sb-show-main {
   align-items: center;
   align-content: center;
   color: $g2-kevlar;
-  font-weight: 700;
+  font-weight: $cf-font-weight--bold;
   font-size: 12px;
-  min-height: $form-sm-height;
+  min-height: $cf-form-sm-height;
   padding: $cf-marg-a;
   line-height: 16px;
+  user-select: none;
   text-align: center;
 
   &.alt-color {
@@ -63,7 +63,7 @@ body.sb-show-main {
   }
 
   &.mockInput {
-    height: $form-sm-height;
+    height: $cf-form-sm-height;
     width: 100%;
   }
 
@@ -95,6 +95,15 @@ body.sb-show-main {
   &.grid-example {
     margin: $cf-marg-a 0;
   }
+}
+
+.clickTestZone {
+  @extend .mockComponent;
+  background: none;
+  color: $g13-mist;
+  border: 2px dashed $g5-pepper;
+  width: 300px;
+  height: 300px;
 }
 
 .story--container {
@@ -129,6 +138,10 @@ body.sb-show-main {
   }
 }
 
+.mockPageWrapper {
+  background-color: $g1-raven;
+}
+
 .mockPage {
   width: 100%;
   height: 600px;
@@ -146,7 +159,7 @@ body.sb-show-main {
   align-items: stretch;
 }
 
-@media screen and (min-width: $nav-menu--breakpoint) {
+@media screen and (min-width: $cf-nav-menu--breakpoint) {
   .appWrapper {
     flex-direction: row;
   }
@@ -166,7 +179,7 @@ body.sb-show-main {
 
 .mockCard {
   border-radius: $cf-radius;
-  font-weight: 700;
+  font-weight: $cf-font-weight--bold;
   font-size: 12px;
   position: relative;
   width: 100%;
@@ -194,7 +207,30 @@ body.sb-show-main {
   align-content: center;
   padding: 64px;
   position: relative;
+  margin-bottom: 24px;
 
+  &__column {
+    @extend .story--example;
+    flex-direction: column;
+  }
+
+  & > .cf-overlay--mask {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  &.top {
+    align-items: flex-start;
+  }
+
+  code {
+    background-color: $g0-obsidian;
+    color: $c-galaxy;
+    font-weight: 700;
+    line-height: 1em;
+    padding: 3px 7px;
+    border-radius: 3px;
+  }
 }
 
 .overlay--example {
@@ -202,7 +238,7 @@ body.sb-show-main {
     opacity: 0.7;
     visibility: hidden;
   }
-  
+
   &.show-overlay {
     .overlay--mask {
       visibility: visible;
@@ -230,8 +266,14 @@ body.sb-show-main {
   }
 
   p {
-    font-weight: 600;
+    font-weight: $cf-font-weight--medium;
     margin: 0;
+  }
+}
+
+.story--invisible-table {
+  td {
+    padding: 22px;
   }
 }
 
@@ -268,12 +310,12 @@ body.sb-show-main {
 
 .storybook-readme-story div.markdown-body {
   font-size: $docs-text-base;
-  font-family: 'Roboto', Helvetica, Arial, Tahoma, Verdana, sans-serif;
+  font-family: 'Rubik', Helvetica, Arial, Tahoma, Verdana, sans-serif;
 
   a:link,
   a:visited,
   a:active {
-    font-weight: 900;
+    font-weight: $cf-font-weight--black;
     text-decoration: underline;
     transition: color 0.25s ease, text-shadow 0.25s ease;
   }
@@ -313,59 +355,59 @@ body.sb-show-main {
   h1 {
     line-height: 1.25em;
     font-size: ceil($docs-text-base-5 * $docs-text-scale);
-    font-weight: 300;
+    font-weight: $cf-font-weight--light;
     letter-spacing: 0.01em;
   }
   h2 {
     line-height: 1.25em;
     font-size: $docs-text-base-4;
-    font-weight: 300;
+    font-weight: $cf-font-weight--light;
   }
   h3 {
     line-height: 1.25em;
     font-size: $docs-text-base-3;
-    font-weight: 500;
+    font-weight: $cf-font-weight--medium;
     small {
-      font-weight: 500;
+      font-weight: $cf-font-weight--medium;
     }
   }
   h4 {
     line-height: 1.25em;
     font-size: $docs-text-base-2;
-    font-weight: 400;
+    font-weight: $cf-font-weight--regular;
     small {
-      font-weight: 400;
+      font-weight: $cf-font-weight--regular;
     }
   }
   h5 {
     line-height: 1.25em;
     font-size: $docs-text-base-1;
-    font-weight: 600;
+    font-weight: $cf-font-weight--medium;
     small {
-      font-weight: 500;
+      font-weight: $cf-font-weight--medium;
     }
   }
   h6 {
     line-height: 1.25em;
     font-size: $docs-text-base;
-    font-weight: 900;
+    font-weight: $cf-font-weight--black;
     small {
-      font-weight: 500;
+      font-weight: $cf-font-weight--medium;
     }
   }
   p {
     color: $g11-sidewalk;
     font-size: $docs-text-base;
     line-height: 1.55em;
-    font-weight: 500;
+    font-weight: $cf-font-weight--medium;
 
     b,
     strong {
-      font-weight: 900;
+      font-weight: $cf-font-weight--black;
     }
 
     small {
-      font-weight: 500;
+      font-weight: $cf-font-weight--medium;
     }
   }
 
@@ -376,7 +418,7 @@ body.sb-show-main {
 
   li {
     line-height: 1.55em;
-    font-weight: 500;
+    font-weight: $cf-font-weight--medium;
   }
 
   hr {
@@ -387,9 +429,10 @@ body.sb-show-main {
   }
 
   code {
-    font-family: 'RobotoMono', monospace;
+    font-family: 'IBMPlexMono', monospace;
+    font-style: normal;
     text-shadow: none;
-    font-weight: 500;
+    font-weight: $cf-font-weight--medium;
     color: $c-potassium;
     background-color: $g1-raven;
     font-size: inherit;
@@ -499,7 +542,7 @@ body.sb-show-main {
       line-height: 18px;
       padding: 0 6px;
       white-space: nowrap;
-      font-weight: 600;
+      font-weight: $cf-font-weight--medium;
       text-shadow: none;
       background-color: $g0-obsidian;
       border-bottom-left-radius: 6px;
@@ -602,27 +645,32 @@ table.two-axis-table {
   ------------------------------------------------------------------------------
 */
 
+$color-grid-card-width: 154px;
+
 .colors-grid,
 .gradients-grid {
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-bottom: 16px;
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
 }
 
 .colors-grid--card,
 .gradients-grid--card {
-  margin-right: 4px;
-  margin-bottom: 4px;
-  height: 180px;
-  border-radius: $cf-radius;
-  position: relative;
+  width: 100%;
+  height: 90px;
   padding: 8px;
+  display: flex;
+  border-radius: $cf-radius-sm;
+  flex-direction: column;
 
-  p {
-    opacity: 0.6;
-    margin: 0;
-    font-size: 13px;
-    font-weight: 700;
+  > p {
+    opacity: 0.8;
+    margin: 0 !important;
+    font-size: 12px !important;
+    font-weight: $cf-font-weight--bold;
 
     &.colors-grid--hex {
       text-transform: uppercase;
@@ -638,49 +686,50 @@ table.two-axis-table {
   }
 }
 
-.colors-grid--card {
-  flex: 0 0 calc(33.3333% - 4px);
-}
-
-.gradients-grid--card {
-  margin-right: 0;
-  flex: 0 0 calc(100%);
-}
-
-@media screen and (min-width: 700px) {
-  .colors-grid--card {
-    flex: 0 0 calc(25% - 4px);
+@media screen and (min-width: $color-grid-card-width * 2) {
+  .colors-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-@media screen and (min-width: 900px) {
-  .colors-grid--card {
-    flex: 0 0 calc(20% - 4px);
-  }
-  .gradients-grid--card {
-    margin-right: 4px;
-    flex: 0 0 calc(33.3333% - 4px);
+@media screen and (min-width: $color-grid-card-width * 3) {
+  .colors-grid {
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 
-@media screen and (min-width: 1100px) {
-  .colors-grid--card {
-    flex: 0 0 calc(16.6666667% - 4px);
+@media screen and (min-width: $color-grid-card-width * 4) {
+  .colors-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }
 
-@media screen and (min-width: 1300px) {
-  .colors-grid--card {
-    flex: 0 0 calc(12.5% - 4px);
+@media screen and (min-width: $color-grid-card-width * 5) {
+  .colors-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   }
 }
 
-@media screen and (min-width: 1500px) {
-  .colors-grid--card {
-    flex: 0 0 calc(10% - 4px);
+@media screen and (min-width: $color-grid-card-width * 6) {
+  .colors-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+  .gradients-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   }
 }
 
+@media screen and (min-width: $color-grid-card-width * 7) {
+  .colors-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: $color-grid-card-width * 8) {
+  .colors-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}
 
 .icon-grid {
   display: flex;
@@ -706,3 +755,93 @@ table.two-axis-table {
   border-radius: $cf-radius;
   margin: 1px;
 }
+
+.story-spacer {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/*
+  Testing Table
+  ------------------------------------------------------------------------------
+*/
+
+.story--testing-table {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 300px;
+  border: 1px solid $g3-castle;
+}
+
+.story--testing-cell {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  border: 1px solid $g3-castle;
+}
+
+.story--test-buttons {
+  top: 12px;
+  right: 12px;
+  position: absolute;
+  z-index: 5000;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+
+  &.relative {
+    position: relative;
+    top: initial;
+    right: initial;
+  }
+}
+
+.story--test-buttons button,
+.story--test-button {
+  font-size: 12px;
+  font-weight: $cf-font-weight--bold;
+  height: 24px;
+  line-height: 24px;
+  padding: 0 8px;
+  border-radius: $cf-radius;
+  background-color: $g5-pepper;
+  color: $g13-mist;
+  border: 0;
+  outline: none;
+  transition: color 0.25s ease, background-color 0.25s ease;
+  user-select: none;
+
+  &:hover {
+    background-color: $g6-smoke;
+    color: $g16-pearl;
+    cursor: pointer;
+  }
+
+  &:active {
+    background-color: $c-pool;
+    color: $g20-white;
+  }
+}
+
+.notification-tester {
+  margin: $cf-marg-c 0;
+  width: 400px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: $cf-marg-b;
+  border: $cf-border solid $g2-kevlar;
+  border-radius: $cf-radius + 1;
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+

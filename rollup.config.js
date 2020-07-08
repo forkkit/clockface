@@ -25,7 +25,11 @@ let plugins = [
     },
   }),
   copy({
-    targets: [{src: 'src/Styles/Fonts', dest: 'dist'}],
+    targets: [
+      {src: 'src/Styles/Fonts', dest: 'dist'},
+      {src: 'src/Styles/variables.scss', dest: 'dist'},
+      {src: '*/**/Images/*', dest: 'dist/Images'}
+    ],
   }),
   sourceMaps(),
 ]

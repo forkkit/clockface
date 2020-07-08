@@ -1,22 +1,19 @@
-@import '../../Styles/modules';
+@import '../../Styles/variables';
 
 /*
    Overlays
    -----------------------------------------------------------------------------
 */
 
-$overlay--gutter: $cf-marg-c + $cf-marg-b;
-$overlay--header-height: $page--header-size;
-$overlay--title-size: $page--title-size;
-$overlay--title-weight: $page--title-weight;
-$overlay--container-padding: $cf-marg-c + $cf-marg-d;
-$overlay--transition-distance: 72px;
+.cf-overlay-portal {
+  @include portal-style($cf-z--overlays);
+}
 
-// Mixin for shared styles
+// Mixins for shared styles
 %overlay-styles {
-  position: fixed !important;
-  width: 100% !important;
-  height: 100% !important;
+  position: absolute !important;
+  width: 100vw !important;
+  height: 100vh !important;
   top: 0;
   left: 0;
 }
@@ -26,72 +23,87 @@ $overlay--transition-distance: 72px;
 }
 
 .cf-overlay--mask {
-  z-index: 0;
   @extend %overlay-styles;
-  opacity: 0;
-  transition: opacity 0.25s ease;
+  z-index: $cf-overlay--mask-z;
 }
 
-.cf-overlay--transition {
-  position: relative;
-  z-index: 2;
-  transform: translateY($overlay--transition-distance);
-  opacity: 0;
-  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-    opacity 0.25s ease;
+.cf-overlay--children {
+  display: flex;
+  justify-content: center;
 }
 
 .cf-overlay {
-  z-index: $z--overlays;
   @extend %overlay-styles;
-  transition: all 0.25s ease;
-  pointer-events: none;
-  opacity: 0;
-
-  &.show {
-    opacity: 1;
-    pointer-events: all;
-  }
-}
-
-// Open State
-.cf-overlay.show {
-  .cf-overlay--mask {
-    opacity: 0.7;
-  }
-  .cf-overlay--transition {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  z-index: $cf-overlay--z;
 }
 
 .cf-overlay--container {
   @extend %overlay-children;
-  margin: $overlay--container-padding auto;
-  background-color: $g2-kevlar;
+  background-color: $g1-raven;
   border-radius: $cf-radius;
+
+  &__xs {
+    margin: $cf-page--gutter-xs;
+  }
+
+  &__sm {
+    margin: $cf-page--gutter-sm;
+  }
+
+  &__md {
+    margin: $cf-page--gutter-md;
+  }
+
+  &__lg {
+    margin: $cf-page--gutter-lg;
+  }
 }
 
 .cf-overlay--header {
   @extend %overlay-children;
-  height: $overlay--header-height;
   display: flex;
-  padding: 0 $overlay--gutter;
   justify-content: space-between;
-  align-items: center;
+  width: 100%;
   @include no-user-select();
 }
 
+
 .cf-overlay--title {
-  font-size: $overlay--title-size;
-  font-weight: $overlay--title-weight;
-  color: $g17-whisper;
-  white-space: nowrap;
+  font-family: $cf-overlay--title-font;
+  font-size: $cf-overlay--title-size;
+  font-weight: $cf-overlay--title-weight;
+  color: $cf-overlay--title-color;
+  
+  .cf-overlay--header__dismissable & {
+    width: calc(100% - #{$cf-overlay--header-height - 50px});
+  }
+}
+
+.cf-overlay--header__nowrap {
+  height: $cf-overlay--header-height;
+  padding: 0 $cf-overlay--gutter;
+  align-items: center;
+
+  .cf-overlay--title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.cf-overlay--header__wrap {
+  min-height: $cf-overlay--header-height;
+  padding: $cf-marg-c $cf-overlay--gutter;
+  align-items: flex-start;
+
+  .cf-overlay--title {
+    word-break: break-all;
+  }
 }
 
 .cf-overlay--dismiss {
-  width: ($overlay--header-height - 20px);
-  height: ($overlay--header-height - 20px);
+  width: ($cf-overlay--header-height - 50px);
+  height: ($cf-overlay--header-height - 32px);
   position: relative;
   background-color: transparent;
   border: 0;
@@ -103,11 +115,11 @@ $overlay--transition-distance: 72px;
     content: '';
     position: absolute;
     top: 50%;
-    left: calc(50% + 10px);
+    left: 50%;
     width: 22px;
     height: 2px;
     border-radius: 1px;
-    background-color: $g11-sidewalk;
+    background-color: $g9-mountain;
     transition: background-color 0.25s ease;
   }
   &:before {
@@ -122,23 +134,20 @@ $overlay--transition-distance: 72px;
   }
   &:hover:before,
   &:hover:after {
-    background-color: $g18-cloud;
+    background-color: $c-laser;
   }
 }
 
 .cf-overlay--body {
   @extend %overlay-children;
-  padding: $overlay--gutter;
+  padding: $cf-overlay--gutter;
   padding-top: 0;
-  color: $g13-mist;
-
-  p {
-    font-weight: 500;
-  }
+  color: $cf-input-text--default;
+  font-size: 0.9em;
 }
 
 .cf-overlay--footer {
   @extend %overlay-children;
-  padding: $overlay--gutter;
+  padding: $cf-overlay--gutter;
   padding-top: 0;
 }

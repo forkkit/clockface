@@ -1,48 +1,55 @@
 // Libraries
-import React, {PureComponent} from 'react'
+import React, {forwardRef} from 'react'
 import classnames from 'classnames'
 
 // Styles
 import './AppWrapper.scss'
 
 // Types
-import {StandardClassProps} from '../../Types'
+import {StandardFunctionProps} from '../../Types'
 
-interface Props extends StandardClassProps {
+export type AppWrapperType = 'standard' | 'funnel'
+
+export interface AppWrapperProps extends StandardFunctionProps {
   /** Hides the page header and nav menu so that the contents can take up the whole screen */
-  presentationMode: boolean
+  presentationMode?: boolean
+  /** Controls responsive layout (can be either "page" for "funnel") */
+  type?: AppWrapperType
 }
 
-export class AppWrapper extends PureComponent<Props> {
-  public static readonly displayName = 'AppWrapper'
+export type AppWrapperRef = HTMLDivElement
 
-  public static defaultProps = {
-    testID: 'app-wrapper',
-    presentationMode: false,
-    id: 'cf-app-wrapper',
-  }
-
-  public render() {
-    const {children, testID, id, style} = this.props
+export const AppWrapper = forwardRef<AppWrapperRef, AppWrapperProps>(
+  (
+    {
+      id = 'cf-app-wrapper',
+      type = 'standard',
+      style,
+      testID = 'app-wrapper',
+      children,
+      className,
+      presentationMode = false,
+    },
+    ref
+  ) => {
+    const appWrapperClass = classnames('clockface--app-wrapper', {
+      'clockface--app-wrapper__presentation-mode': presentationMode,
+      [`clockface--app-wrapper__${type}`]: type,
+      [`${className}`]: className,
+    })
 
     return (
       <div
-        className={this.className}
+        className={appWrapperClass}
         data-testid={testID}
         id={id}
         style={style}
+        ref={ref}
       >
         {children}
       </div>
     )
   }
+)
 
-  private get className(): string {
-    const {className, presentationMode} = this.props
-
-    return classnames('clockface--app-wrapper', {
-      'clockface--app-wrapper__presentation-mode': presentationMode,
-      [`${className}`]: className,
-    })
-  }
-}
+AppWrapper.displayName = 'AppWrapper'

@@ -29,7 +29,7 @@ a:visited {
     color: $cf-link-warning;
   }
   &.link-secondary {
-    color: $cf-text-secondary;
+    color: $cf-link-secondary;
   }
 }
 a:hover,
@@ -46,8 +46,8 @@ a:active {
   &.link-warning {
     color: $cf-link-warning-hover;
   }
-  &.link-secondar {
-    color: $cf-text-secondary-hover;
+  &.link-secondary {
+    color: $cf-link-secondary-hover;
   }
 }
 
@@ -66,7 +66,7 @@ a:active {
 // -----------------------------------------------------------------------------
 
 %type-base-styles {
-  margin: $cf-marg-b 0 0.55em 0;
+  margin: 1em 0;
 }
 %type-small-styles {
   small {
@@ -82,16 +82,17 @@ p {
   @extend %type-base-styles;
   font-size: $cf-text-base;
   line-height: 1.55em;
-  font-weight: 400;
+  font-weight: $cf-font-weight--regular;
 
-  b,strong {
-    font-weight: 900;
+  b,
+  strong {
+    font-weight: $cf-font-weight--medium;
   }
 
   small {
     color: $cf-text-default;
     font-size: $cf-text-tiny;
-    font-weight: 500;
+    font-weight: $cf-font-weight--medium;
   }
 }
 
@@ -100,25 +101,25 @@ h1 {
   @extend %type-small-styles;
   line-height: 1.25em;
   font-size: $cf-text-base-5;
-  font-weight: 300;
-  letter-spacing: -1px;
+  font-weight: $cf-font-weight--light;
+  letter-spacing: -0.01em;
 }
 h2 {
   @extend %type-base-styles;
   @extend %type-small-styles;
   line-height: 1.25em;
   font-size: $cf-text-base-4;
-  font-weight: 300;
-  letter-spacing: -1px;
+  font-weight: $cf-font-weight--light;
+  letter-spacing: -0.01em;
 }
 h3 {
   @extend %type-base-styles;
   @extend %type-small-styles;
   line-height: 1.25em;
   font-size: $cf-text-base-3;
-  font-weight: 400;
+  font-weight: $cf-font-weight--regular;
   small {
-    font-weight: 400;
+    font-weight: $cf-font-weight--regular;
   }
 }
 h4 {
@@ -126,9 +127,9 @@ h4 {
   @extend %type-small-styles;
   line-height: 1.25em;
   font-size: $cf-text-base-2;
-  font-weight: 400;
+  font-weight: $cf-font-weight--regular;
   small {
-    font-weight: 400;
+    font-weight: $cf-font-weight--regular;
   }
 }
 h5 {
@@ -136,9 +137,9 @@ h5 {
   @extend %type-small-styles;
   line-height: 1.25em;
   font-size: $cf-text-base-1;
-  font-weight: 600;
+  font-weight: $cf-font-weight--medium;
   small {
-    font-weight: 500;
+    font-weight: $cf-font-weight--medium;
   }
 }
 h6 {
@@ -146,17 +147,18 @@ h6 {
   @extend %type-small-styles;
   line-height: 1.25em;
   font-size: $cf-text-base;
-  font-weight: 900;
+  font-weight: $cf-font-weight--medium;
   small {
-    font-weight: 500;
+    font-weight: $cf-font-weight--medium;
   }
 }
-ol,ul {
+ol,
+ul {
   @extend %type-base-styles;
   padding-left: $cf-marg-c;
   font-size: $cf-text-base;
   line-height: 1.55em;
-  font-weight: 500;
+  font-weight: $cf-font-weight--medium;
 }
 li {
   margin: 0 0 $cf-marg-b 0;
@@ -169,7 +171,7 @@ blockquote {
   @extend %type-base-styles;
   font-size: $cf-text-base;
   line-height: 1.55em;
-  font-weight: 400;
+  font-weight: $cf-font-weight--regular;
   border: 0;
   padding: $cf-marg-b $cf-marg-c;
   color: $cf-text-default;
@@ -196,12 +198,13 @@ blockquote {
     border-width: 0 $cf-border $cf-border 0;
   }
 
-  b,strong {
-    font-weight: 900;
+  b,
+  strong {
+    font-weight: $cf-font-weight--medium;
   }
 }
 hr {
-  border:0;
+  border: 0;
   height: 2px;
   margin: $cf-marg-c 0 $cf-marg-d 0;
   background-color: $g5-pepper;
@@ -212,8 +215,9 @@ hr {
 }
 
 // Type Formatting
-b,strong {
-  font-weight: 900;
+b,
+strong {
+  font-weight: $cf-font-weight--medium;
 }
 mark {
   background-color: $c-emerald;

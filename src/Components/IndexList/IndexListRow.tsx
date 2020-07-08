@@ -1,39 +1,50 @@
 // Libraries
-import React, {Component} from 'react'
+import React, {forwardRef} from 'react'
 import classnames from 'classnames'
 
 // Types
-import {StandardClassProps} from '../../Types'
+import {StandardFunctionProps} from '../../Types'
 
-interface Props extends StandardClassProps {
+export interface IndexListRowProps extends StandardFunctionProps {
   /** Renders the row with disabled styles */
-  disabled: boolean
+  disabled?: boolean
+  /** Brightens the row so it can contrast with components such as Panel or Tabs */
+  brighten?: boolean
 }
 
-export class IndexListRow extends Component<Props> {
-  public static readonly displayName = 'IndexListRow'
+export type IndexListRowRef = HTMLTableRowElement
 
-  public static defaultProps = {
-    disabled: false,
-    testID: 'table-row',
-  }
-
-  public render() {
-    const {children, testID, id, style} = this.props
+export const IndexListRow = forwardRef<IndexListRowRef, IndexListRowProps>(
+  (
+    {
+      children,
+      id,
+      style,
+      brighten,
+      className,
+      disabled = false,
+      testID = 'table-row',
+    },
+    ref
+  ) => {
+    const IndexListRowClass = classnames('cf-index-list--row', {
+      'cf-index-list--row__nested': brighten,
+      'cf-index-list--row__disabled': disabled,
+      [`${className}`]: className,
+    })
 
     return (
-      <tr data-testid={testID} className={this.className} id={id} style={style}>
+      <tr
+        id={id}
+        ref={ref}
+        style={style}
+        data-testid={testID}
+        className={IndexListRowClass}
+      >
         {children}
       </tr>
     )
   }
+)
 
-  private get className(): string {
-    const {disabled, className} = this.props
-
-    return classnames('index-list--row', {
-      'index-list--row-disabled': disabled,
-      [`${className}`]: !!className,
-    })
-  }
-}
+IndexListRow.displayName = 'IndexListRow'

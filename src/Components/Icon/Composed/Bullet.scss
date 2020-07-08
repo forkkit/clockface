@@ -1,0 +1,47 @@
+@import '../../../Styles/variables';
+
+/*
+   Bullet
+   -----------------------------------------------------------------------------
+*/
+
+.cf-bullet {
+  user-select: none;
+  border-radius: 50%;
+  background-color: $g2-kevlar;
+  font-weight: $cf-font-weight--bold;
+  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: $c-honeydew;
+}
+
+/*
+  Size Modifiers
+  ------------------------------------------------------------------------------
+*/
+
+@mixin bulletSizeModifier($fontSize, $diameter) {
+  font-size: $fontSize * 1.2;
+  width: $diameter * 0.75;
+  height: $diameter * 0.75;
+
+  @media screen and (min-width: 1080px) {
+    width: $diameter;
+    height: $diameter;
+  }
+}
+
+.cf-bullet__xs {
+  @include bulletSizeModifier($cf-form-xs-font, $cf-form-xs-height);
+}
+.cf-bullet__sm {
+  @include bulletSizeModifier($cf-form-sm-font, $cf-form-sm-height);
+}
+.cf-bullet__md {
+  @include bulletSizeModifier($cf-form-md-font, $cf-form-md-height);
+}
+.cf-bullet__lg {
+  @include bulletSizeModifier($cf-form-lg-font, $cf-form-lg-height);
+}

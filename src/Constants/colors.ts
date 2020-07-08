@@ -1,37 +1,29 @@
-import {
-  Color,
-  InfluxColors,
-  Gradients,
-  Gradient,
-  DropdownMenuTheme,
-} from '../Types'
-
-export const HEX_CODE_CHAR_LENGTH = 7
+import {Color, InfluxColors} from '../Types'
 
 export const influxColors: Color[] = [
   // Row 1
   {
-    hex: '#311F94',
+    hex: '#5c10a0',
     name: 'Void',
   },
   {
-    hex: '#513CC6',
+    hex: '#8e1fc3',
     name: 'Amethyst',
   },
   {
-    hex: '#7A65F2',
+    hex: '#be2ee4',
     name: 'Star',
   },
   {
-    hex: '#9394FF',
+    hex: '#ce58eb',
     name: 'Comet',
   },
   {
-    hex: '#B1B6FF',
+    hex: '#dd84f1',
     name: 'Potassium',
   },
   {
-    hex: '#C9D0FF',
+    hex: '#ebadf8',
     name: 'Moonstone',
   },
   {
@@ -52,15 +44,15 @@ export const influxColors: Color[] = [
   },
   // Row 2
   {
-    hex: '#326BBA',
+    hex: '#0b3a8d',
     name: 'Sapphire',
   },
   {
-    hex: '#4591ED',
+    hex: '#066fc5',
     name: 'Ocean',
   },
   {
-    hex: '#22ADF6',
+    hex: '#00a3ff',
     name: 'Pool',
   },
   {
@@ -93,27 +85,27 @@ export const influxColors: Color[] = [
   },
   // Row 3
   {
-    hex: '#108174',
+    hex: '#006f49',
     name: 'Emerald',
   },
   {
-    hex: '#32B08C',
+    hex: '#009f5f',
     name: 'Viridian',
   },
   {
-    hex: '#4ED8A0',
+    hex: '#34bb55',
     name: 'Rainforest',
   },
   {
-    hex: '#7CE490',
+    hex: '#67d74e',
     name: 'Honeydew',
   },
   {
-    hex: '#A5F3B4',
+    hex: '#9bf445',
     name: 'Krypton',
   },
   {
-    hex: '#C6FFD0',
+    hex: '#c6f98e',
     name: 'Wasabi',
   },
   {
@@ -313,33 +305,102 @@ export const influxGradients = {
     start: InfluxColors.Yeti,
     stop: InfluxColors.Mint,
   },
+  CephalopodInk: {
+    start: InfluxColors.Gypsy,
+    stop: InfluxColors.Oak,
+  },
+  JungleDusk: {
+    start: InfluxColors.Emerald,
+    stop: InfluxColors.Topaz,
+  },
+  JalapenoTaco: {
+    start: InfluxColors.Viridian,
+    stop: InfluxColors.Tiger,
+  },
+  MangoGrove: {
+    start: InfluxColors.Rainforest,
+    stop: InfluxColors.Pineapple,
+  },
+  CitrusSodapop: {
+    start: InfluxColors.Honeydew,
+    stop: InfluxColors.Thunder,
+  },
+  CandyApple: {
+    start: InfluxColors.Krypton,
+    stop: InfluxColors.Sulfur,
+  },
+  MillennialAvocado: {
+    start: InfluxColors.Wasabi,
+    stop: InfluxColors.Daisy,
+  },
+  MintyFresh: {
+    start: InfluxColors.Mint,
+    stop: InfluxColors.Banana,
+  },
+  DarkChocolate: {
+    start: InfluxColors.Oak,
+    stop: InfluxColors.Basalt,
+  },
+  SavannaHeat: {
+    start: InfluxColors.Topaz,
+    stop: InfluxColors.Ruby,
+  },
+  FuyuPersimmon: {
+    start: InfluxColors.Tiger,
+    stop: InfluxColors.Fire,
+  },
+  ScotchBonnet: {
+    start: InfluxColors.Pineapple,
+    stop: InfluxColors.Curacao,
+  },
+  CaliforniaCampfire: {
+    start: InfluxColors.Thunder,
+    stop: InfluxColors.Dreamsicle,
+  },
+  JustPeachy: {
+    start: InfluxColors.Sulfur,
+    stop: InfluxColors.Tungsten,
+  },
+  GoldenHour: {
+    start: InfluxColors.Daisy,
+    stop: InfluxColors.Marmelade,
+  },
+  SimpleCream: {
+    start: InfluxColors.Banana,
+    stop: InfluxColors.Flan,
+  },
+  // Brand Gradients
   WarpSpeed: {
     start: InfluxColors.DeepPurple,
+    stop: InfluxColors.Void,
+  },
+  PowerStone: {
+    start: InfluxColors.Void,
     stop: InfluxColors.Magenta,
   },
   OminousFog: {
-    start: InfluxColors.DeepPurple,
-    stop: InfluxColors.Comet,
+    start: InfluxColors.Pulsar,
+    stop: InfluxColors.Galaxy,
   },
   MilkyWay: {
     start: InfluxColors.Magenta,
-    stop: InfluxColors.Comet,
+    stop: InfluxColors.Galaxy,
   },
   LazyAfternoon: {
     start: InfluxColors.Pool,
-    stop: InfluxColors.Comet,
+    stop: InfluxColors.Galaxy,
   },
   NineteenEightyFour: {
     start: InfluxColors.Pool,
     stop: InfluxColors.Magenta,
   },
-  Radioactive: {
+  RadioactiveWarning: {
     start: InfluxColors.Pool,
     stop: InfluxColors.Chartreuse,
   },
   LostGalaxy: {
     start: InfluxColors.DeepPurple,
-    stop: InfluxColors.Void,
+    stop: InfluxColors.Pulsar,
   },
   GrapeSoda: {
     start: InfluxColors.DeepPurple,
@@ -348,6 +409,79 @@ export const influxGradients = {
   LavenderLatte: {
     start: InfluxColors.DeepPurple,
     stop: InfluxColors.Star,
+  },
+  // Single Hue Gradients
+  DefaultDark: {
+    start: InfluxColors.Castle,
+    stop: InfluxColors.Smoke,
+  },
+  Default: {
+    start: InfluxColors.Wolf,
+    stop: InfluxColors.Mist,
+  },
+  DefaultLight: {
+    start: InfluxColors.Mist,
+    stop: InfluxColors.Cloud,
+  },
+  PrimaryDark: {
+    start: InfluxColors.Sapphire,
+    stop: InfluxColors.Ocean,
+  },
+  Primary: {
+    start: InfluxColors.Pool,
+    stop: InfluxColors.Laser,
+  },
+  PrimaryLight: {
+    start: InfluxColors.Laser,
+    stop: InfluxColors.Hydrogen,
+  },
+  SecondaryDark: {
+    start: InfluxColors.Void,
+    stop: InfluxColors.Amethyst,
+  },
+  Secondary: {
+    start: InfluxColors.Star,
+    stop: InfluxColors.Comet,
+  },
+  SecondaryLight: {
+    start: InfluxColors.Comet,
+    stop: InfluxColors.Moonstone,
+  },
+  SuccessDark: {
+    start: InfluxColors.Emerald,
+    stop: InfluxColors.Viridian,
+  },
+  Success: {
+    start: InfluxColors.Rainforest,
+    stop: InfluxColors.Honeydew,
+  },
+  SuccessLight: {
+    start: InfluxColors.Honeydew,
+    stop: InfluxColors.Krypton,
+  },
+  WarningDark: {
+    start: InfluxColors.Topaz,
+    stop: InfluxColors.Tiger,
+  },
+  Warning: {
+    start: InfluxColors.Pineapple,
+    stop: InfluxColors.Thunder,
+  },
+  WarningLight: {
+    start: InfluxColors.Thunder,
+    stop: InfluxColors.Sulfur,
+  },
+  DangerDark: {
+    start: InfluxColors.Ruby,
+    stop: InfluxColors.Fire,
+  },
+  Danger: {
+    start: InfluxColors.Curacao,
+    stop: InfluxColors.Dreamsicle,
+  },
+  DangerLight: {
+    start: InfluxColors.Dreamsicle,
+    stop: InfluxColors.Tungsten,
   },
 }
 
@@ -364,10 +498,4 @@ export const dropdownScrollColors = {
     start: InfluxColors.Neutrino,
     stop: InfluxColors.Krypton,
   },
-}
-
-export const getColorsFromGradient = (
-  gradient: Gradients | DropdownMenuTheme | string
-): Gradient => {
-  return dropdownScrollColors[gradient] || influxGradients[gradient]
 }

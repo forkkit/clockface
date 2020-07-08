@@ -1,55 +1,76 @@
 // Libraries
-import React, {Component} from 'react'
+import React, {forwardRef} from 'react'
+import classnames from 'classnames'
 
 // Types
-import {StandardClassProps} from '../../Types'
+import {StandardFunctionProps} from '../../Types'
 
-interface Props extends StandardClassProps {
+export interface FormLabelProps extends StandardFunctionProps {
   /** Label Text */
   label: string
   /** Whether this field is required to submit form, adds red required asterisk */
   required?: boolean
+  /** Useful for associating a label with an input */
+  htmlFor?: string
 }
 
-export class FormLabel extends Component<Props> {
-  public static readonly displayName = 'FormLabel'
+export type FormLabelRef = HTMLDivElement & HTMLLabelElement
 
-  public static defaultProps = {
-    testID: 'form--label',
-  }
+export const FormLabel = forwardRef<FormLabelRef, FormLabelProps>(
+  (
+    {
+      id,
+      label,
+      style,
+      testID = 'form--label',
+      htmlFor,
+      children,
+      required,
+      className,
+    },
+    ref
+  ) => {
+    const formLabelClass = classnames('cf-form--label', {
+      [`${className}`]: className,
+    })
 
-  public render() {
-    const {label, children, testID, id, style} = this.props
-
-    return (
-      <label
-        className={this.className}
-        data-testid={testID}
-        id={id}
-        style={style}
-      >
-        <span>
+    const labelChildren = (
+      <>
+        <div className="cf-form--label-text">
           {label}
-          {this.requiredIndicator}
-        </span>
+          {!!required && <span className="cf-form--label-required">*</span>}
+        </div>
         {children}
-      </label>
+      </>
     )
-  }
 
-  private get requiredIndicator(): JSX.Element | undefined {
-    const {required} = this.props
-
-    if (!required) {
-      return
+    if (htmlFor) {
+      return (
+        <label
+          id={id}
+          ref={ref}
+          style={style}
+          htmlFor={htmlFor}
+          data-testid={testID}
+          className={formLabelClass}
+        >
+          {labelChildren}
+        </label>
+      )
     }
 
-    return <span className="cf-form--label-required">*</span>
+    return (
+      <div
+        id={id}
+        ref={ref}
+        style={style}
+        data-testid={testID}
+        className={formLabelClass}
+      >
+        {labelChildren}
+      </div>
+    )
   }
+)
 
-  private get className(): string {
-    const {className} = this.props
-
-    return className ? `cf-form--label ${className}` : 'cf-form--label'
-  }
-}
+FormLabel.displayName = 'FormLabel'

@@ -1,26 +1,32 @@
-import {CSSProperties} from 'react'
+import {CSSProperties, ReactNode} from 'react'
+import {
+  GRID_BREAKPOINT_SM,
+  GRID_BREAKPOINT_MD,
+  GRID_BREAKPOINT_LG,
+} from '../Constants'
 
 // Utilities
 export type Omit<K, V> = Pick<K, Exclude<keyof K, V>>
 
 // Standardized prop definitons
-interface StandardProps {
-  /** Useful for overriding styles of the component and its constituent elements */
-  className?: string
+export interface StandardFunctionProps {
   /** Unique identifier for getting an element */
   id?: string
   /** Useful for setting common attributes like width or height */
   style?: CSSProperties
-}
-
-export interface StandardClassProps extends StandardProps {
-  /** ID for Integration Tests */
-  testID: string
-}
-export interface StandardFunctionProps extends StandardProps {
   /** ID for Integration Tests */
   testID?: string
+  /** Children */
+  children?: ReactNode
+  /** Useful for overriding styles of the component and its constituent elements */
+  className?: string
 }
+
+// Standard Validation Function
+export type ValidationFunction = (input: string) => string | null
+
+// Passing in link elements
+export type RenderLinkElement = (className: string) => JSX.Element
 
 // Shared Data Types
 export enum ComponentColor {
@@ -61,36 +67,73 @@ export enum Gradients {
   BeijingEclipse = 'BeijingEclipse',
   DistantNebula = 'DistantNebula',
   SpirulinaSmoothie = 'SpirulinaSmoothie',
+  CephalopodInk = 'CephalopodInk',
+  DarkChocolate = 'DarkChocolate',
   LASunset = 'LASunset',
   PolarExpress = 'PolarExpress',
   RebelAlliance = 'RebelAlliance',
+  JungleDusk = 'JungleDusk',
+  SavannaHeat = 'SavannaHeat',
   DocScott = 'DocScott',
   GundamPilot = 'GundamPilot',
   TropicalTourist = 'TropicalTourist',
+  JalapenoTaco = 'JalapenoTaco',
+  FuyuPersimmon = 'FuyuPersimmon',
   DesertFestival = 'DesertFestival',
   MiyazakiSky = 'MiyazakiSky',
   GarageBand = 'GarageBand',
+  MangoGrove = 'MangoGrove',
+  ScotchBonnet = 'ScotchBonnet',
   BrooklynCowboy = 'BrooklynCowboy',
   PastelGothic = 'PastelGothic',
   LowDifficulty = 'LowDifficulty',
+  CitrusSodapop = 'CitrusSodapop',
+  CaliforniaCampfire = 'CaliforniaCampfire',
   SynthPop = 'SynthPop',
   CottonCandy = 'CottonCandy',
   HotelBreakfast = 'HotelBreakfast',
+  CandyApple = 'CandyApple',
+  JustPeachy = 'JustPeachy',
   MagicCarpet = 'MagicCarpet',
   CruisingAltitude = 'CruisingAltitude',
   CoconutLime = 'CoconutLime',
+  MillennialAvocado = 'MillennialAvocado',
+  GoldenHour = 'GoldenHour',
   PastryCafe = 'PastryCafe',
   KawaiiDesu = 'KawaiiDesu',
   RobotLogic = 'RobotLogic',
+  MintyFresh = 'MintyFresh',
+  SimpleCream = 'SimpleCream',
+  // Brand Gradients
   WarpSpeed = 'WarpSpeed',
-  OminousFog = 'OminousFog',
+  PowerStone = 'PowerStone',
   MilkyWay = 'MilkyWay',
   LazyAfternoon = 'LazyAfternoon',
   NineteenEightyFour = 'NineteenEightyFour',
-  Radioactive = 'Radioactive',
+  RadioactiveWarning = 'RadioactiveWarning',
   LostGalaxy = 'LostGalaxy',
   GrapeSoda = 'GrapeSoda',
   LavenderLatte = 'LavenderLatte',
+  OminousFog = 'OminousFog',
+  // Single Hue Gradients
+  DefaultLight = 'DefaultLight',
+  Default = 'Default',
+  DefaultDark = 'DefaultDark',
+  PrimaryLight = 'PrimaryLight',
+  Primary = 'Primary',
+  PrimaryDark = 'PrimaryDark',
+  SecondaryLight = 'SecondaryLight',
+  Secondary = 'Secondary',
+  SecondaryDark = 'SecondaryDark',
+  SuccessLight = 'SuccessLight',
+  Success = 'Success',
+  SuccessDark = 'SuccessDark',
+  WarningLight = 'WarningLight',
+  Warning = 'Warning',
+  WarningDark = 'WarningDark',
+  DangerLight = 'DangerLight',
+  Danger = 'Danger',
+  DangerDark = 'DangerDark',
 }
 
 export enum DropdownMenuTheme {
@@ -98,6 +141,11 @@ export enum DropdownMenuTheme {
   Malachite = 'malachite',
   Sapphire = 'sapphire',
   Onyx = 'onyx',
+}
+
+export interface DropdownMenuScrollbarColors {
+  thumbStartColor: InfluxColors
+  thumbStopColor: InfluxColors
 }
 
 export enum DropdownItemType {
@@ -120,7 +168,7 @@ export enum ButtonType {
 export enum InfluxColors {
   // Greys
   Obsidian = '#0f0e15',
-  Raven = '#1c1c21',
+  Raven = '#181820',
   Kevlar = '#202028',
   Castle = '#292933',
   Onyx = '#31313d',
@@ -141,32 +189,32 @@ export enum InfluxColors {
   Ghost = '#fafafc',
   White = '#ffffff',
   // Blues
-  Abyss = '#182838',
-  Sapphire = '#326BBA',
-  Ocean = '#4591ED',
-  Pool = '#22ADF6',
+  Abyss = '#120653',
+  Sapphire = '#0b3a8d',
+  Ocean = '#066fc5',
+  Pool = '#00a3ff',
   Laser = '#00C9FF',
   Hydrogen = '#6BDFFF',
   Neutrino = '#BEF0FF',
   Yeti = '#F0FCFF',
   // Purples
-  Shadow = '#1F2039',
-  Void = '#311F94',
-  Amethyst = '#513CC6',
-  Star = '#7A65F2',
-  Comet = '#9394FF',
-  Potassium = '#B1B6FF',
-  Moonstone = '#C9D0FF',
-  Twilight = '#F2F4FF',
+  Shadow = '#2b007e',
+  Void = '#5c10a0',
+  Amethyst = '#8e1fc3',
+  Star = '#be2ee4',
+  Comet = '#ce58eb',
+  Potassium = '#dd84f1',
+  Moonstone = '#ebadf8',
+  Twilight = '#fad9ff',
   // Greens
-  Gypsy = '#152B2D',
-  Emerald = '#108174',
-  Viridian = '#32B08C',
-  Rainforest = '#4ED8A0',
-  Honeydew = '#7CE490',
-  Krypton = '#A5F3B4',
-  Wasabi = '#C6FFD0',
-  Mint = '#F2FFF4',
+  Gypsy = '#003e34',
+  Emerald = '#006f49',
+  Viridian = '#009f5f',
+  Rainforest = '#34bb55',
+  Honeydew = '#67d74e',
+  Krypton = '#9bf445',
+  Wasabi = '#c6f98e',
+  Mint = '#f3ffd6',
   // Yellows
   Oak = '#3F241F',
   Topaz = '#E85B1C',
@@ -189,6 +237,8 @@ export enum InfluxColors {
   Chartreuse = '#D6F622',
   DeepPurple = '#13002D',
   Magenta = '#BF2FE5',
+  Galaxy = '#9394FF',
+  Pulsar = '#513CC6',
 }
 
 export enum IconFont {
@@ -221,6 +271,7 @@ export enum IconFont {
   CrownOutline = 'crown-outline',
   CrownSolid = 'crown2',
   Cube = 'cube',
+  Cubo = 'cubo',
   CuboNav = 'cubo-nav',
   Cubouniform = 'cubo-uniform',
   Dashboards = 'dashboards',
@@ -231,6 +282,7 @@ export enum IconFont {
   DisksNav = 'disks-nav',
   Download = 'download',
   Duplicate = 'duplicate',
+  Erlenmeyer = 'erlenmeyer',
   ExpandA = 'expand-a',
   ExpandB = 'expand-b',
   Export = 'export',
@@ -245,6 +297,9 @@ export enum IconFont {
   HerokuSimple = '',
   Import = 'import',
   Link = 'link',
+  Maximize = 'maximize',
+  Minimize = 'minimize',
+  Moon = 'moon',
   NavChat = 'nav-chat',
   OAuth = 'oauth',
   Octagon = 'octagon',
@@ -254,7 +309,9 @@ export enum IconFont {
   Play = 'play',
   Plus = 'plus',
   PlusSkinny = 'plus-skinny',
+  Polaroid = 'polaroid',
   Pulse = 'pulse-c',
+  Redo = 'redo',
   Refresh = 'refresh',
   Remove = 'remove',
   Search = 'search',
@@ -264,9 +321,12 @@ export enum IconFont {
   SquareCheck = 'square-check',
   Star = 'star',
   Stop = 'stop',
+  Sun = 'sun',
   TextBlock = 'text-block',
   Trash = 'trash',
   Triangle = 'triangle',
+  Undo = 'undo',
+  Upgrade = 'upgrade',
   User = 'user',
   UserAdd = 'user-add',
   UserOutline = 'user-outline',
@@ -378,6 +438,11 @@ export enum InputType {
   Range = 'range',
 }
 
+export enum InputToggleType {
+  Checkbox = 'checkbox',
+  Radio = 'radio',
+}
+
 export enum AutoInputMode {
   Auto = 'auto',
   Custom = 'custom',
@@ -396,7 +461,7 @@ export enum PopoverPosition {
   ToTheRight = 'to-right',
 }
 
-export enum PopoverType {
+export enum Appearance {
   Solid = 'solid',
   Outline = 'outline',
 }
@@ -411,4 +476,70 @@ export enum Method {
   Post = 'post',
   Get = 'get',
   Dialog = 'dialog',
+}
+
+export enum Wrap {
+  Hard = 'hard',
+  Soft = 'soft',
+  Off = 'off',
+}
+
+export interface Coordinates {
+  x: number
+  y: number
+}
+
+export enum LinkTarget {
+  Blank = '_blank',
+  Parent = '_parent',
+  Self = '_self',
+  Top = '_top',
+}
+
+export enum LinkRel {
+  Alternate = 'alternate',
+  Author = 'author',
+  Bookmark = 'bookmark',
+  External = 'external',
+  Help = 'help',
+  License = 'license',
+  Next = 'next',
+  NoFollow = 'nofollow',
+  NoOpener = 'noopener',
+  NoReferrer = 'noreferrer',
+  Prev = 'prev',
+  Search = 'search',
+  Tag = 'tag',
+}
+
+export enum Typeface {
+  IBMPlexMono = 'ibm-plex-mono',
+  Rubik = 'rubik',
+}
+
+export enum HeadingElement {
+  H1 = 'h1',
+  H2 = 'h2',
+  H3 = 'h3',
+  H4 = 'h4',
+  H5 = 'h5',
+  H6 = 'h6',
+  Span = 'span',
+  Div = 'div',
+  P = 'p',
+}
+
+export enum FontWeight {
+  Light = '300',
+  Regular = '400',
+  Medium = '500',
+  Bold = '700',
+  Black = '900',
+}
+
+export enum Breakpoint {
+  None = 0,
+  Small = GRID_BREAKPOINT_SM,
+  Medium = GRID_BREAKPOINT_MD,
+  Large = GRID_BREAKPOINT_LG,
 }

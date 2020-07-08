@@ -1,0 +1,38 @@
+@import '../../Styles/variables.scss';
+
+/*
+  Slide Toggle Component
+  ------------------------------------------------------------------------------
+*/
+
+.cf-input-label {
+  white-space: nowrap;
+  font-weight: $cf-font-weight--medium;
+  @include no-user-select();
+  color: $cf-label--default;
+  transition: color 0.25s ease;
+  
+  &.cf-input-label__active {
+    color: $cf-label--active;
+  }
+
+  &.cf-input-label__wrap {
+    white-space: normal;
+  }
+  &.cf-input-label__clickable:hover {
+    cursor: pointer;;
+  }
+}
+
+.cf-input-label__xs {
+  font-size: $cf-form-xs-font;
+}
+.cf-input-label__sm {
+  font-size: $cf-form-sm-font;
+}
+.cf-input-label__md {
+  font-size: $cf-form-md-font;
+}
+.cf-input-label__lg {
+  font-size: $cf-form-lg-font;
+}

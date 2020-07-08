@@ -1,4 +1,4 @@
-@import '../../Styles/modules';
+@import '../../Styles/variables';
 
 /*
   Date Picker Styles
@@ -194,7 +194,8 @@
 .react-datepicker-year-header {
   margin-top: 0;
   color: $g18-cloud;
-  font-weight: 700;
+  font-weight: $cf-font-weight--medium;
+  font-size: 0.8em;
 }
 
 .react-datepicker__current-month {
@@ -422,6 +423,7 @@
   padding: $cf-marg-a $cf-marg-b;
   height: initial;
   margin: 0;
+  font-size: 0.8em;
 }
 
 .react-datepicker__time-container
@@ -500,11 +502,12 @@
   line-height: 1.7rem;
   text-align: center;
   margin: 0.166rem;
+  font-size: 0.8em;
 }
 
 .react-datepicker__day-name {
   color: $c-rainforest;
-  font-weight: 700;
+  font-weight: $cf-font-weight--medium;
 }
 
 .react-datepicker__month--selected,
@@ -873,11 +876,11 @@
 }
 
 // Date Picker Custom Classes
-.date-picker {
+.cf-date-picker {
   margin: $cf-marg-a;
   margin-top: 0;
 
-  .date-picker--calendar {
+  .cf-date-picker--calendar {
     background-color: transparent;
     border: none;
     color: $c-pool;
@@ -886,7 +889,7 @@
     align-items: stretch;
   }
 
-  .date-picker--day {
+  .cf-date-picker--day {
     color: $g7-graphite;
 
     &:hover {
@@ -895,7 +898,7 @@
     }
   }
 
-  .date-picker--day-in-month {
+  .cf-date-picker--day-in-month {
     color: $g14-chromium;
 
     &:hover {

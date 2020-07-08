@@ -7,8 +7,8 @@ We use `yarn` to manage dependencies and build the project.
 
 Get to know our key maintainers:
 
-@thealexpaxton
-@mavarius
+[@alexpaxton](https://github.com/alexpaxton)
+[@mavarius](https://github.com/mavarius)
 
 ## Submitting a Pull Request
 
@@ -39,7 +39,7 @@ If you follow the code patterns below and the instructions in the PR template yo
 ```
 
 - The component should import its associated stylesheet directly into itself
-  - The component stylesheet should import our modules file: `@import "../../Styles/modules.scss";`
+  - The component stylesheet should import our modules file: `@import "../../Styles/variables.scss";`
 - The component (and all sub-components) should be imported & exported from `index.ts`
   - Make sure to keep this list alphabetized for ease of use
 

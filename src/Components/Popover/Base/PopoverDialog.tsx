@@ -1,5 +1,12 @@
 // Libraries
-import React, {Component, createRef, MouseEvent, RefObject} from 'react'
+import React, {
+  useRef,
+  RefObject,
+  MouseEvent,
+  useEffect,
+  useLayoutEffect,
+  forwardRef,
+} from 'react'
 import classnames from 'classnames'
 
 // Components
@@ -11,25 +18,23 @@ import {calculatePopoverStyles} from '../../../Utils/popovers'
 
 // Types
 import {
+  Appearance,
   ComponentColor,
-  StandardClassProps,
-  PopoverType,
   PopoverPosition,
+  StandardFunctionProps,
 } from '../../../Types'
 
-interface Props extends StandardClassProps {
+export interface PopoverDialogProps extends StandardFunctionProps {
   /** Bounding rectangle of trigger element */
   triggerRef: RefObject<any>
   /** Pixel distance between trigger and popover dialog */
   distanceFromTrigger: number
   /** Where to position the popover relative to the trigger (assuming it fits there) */
   position: PopoverPosition
-  /** Determins whether dialog is visible */
-  visible: boolean
   /** Popover dialog color */
   color: ComponentColor
   /** Means of applying color to popover */
-  type: PopoverType
+  appearance: Appearance
   /** Popover dialog contents */
   contents: JSX.Element
   /** Handles clicks detected outside the popover dialog element */
@@ -40,103 +45,146 @@ interface Props extends StandardClassProps {
   caretSize: number
   /** Adds reasonable styles to popover dialog contents so you do not have to */
   enableDefaultStyles: boolean
+  /** Allows the popover to dismiss itself when the trigger is no longer in view */
+  onHide: () => void
+  /** This keeps the Popover visible no matter what */
+  visible?: boolean
 }
 
-export class PopoverDialog extends Component<Props> {
-  public static readonly displayName = 'PopoverDialog'
+export type PopoverDialogRef = HTMLDivElement
 
-  private dialogRef = createRef<HTMLDivElement>()
-  private caretRef = createRef<HTMLDivElement>()
-
-  componentDidMount() {
-    this.handleUpdateStyles()
-    window.addEventListener('scroll', this.handleUpdateStyles)
-    window.addEventListener('resize', this.handleUpdateStyles)
-  }
-
-  componentDidUpdate() {
-    this.handleUpdateStyles()
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleUpdateStyles)
-    window.removeEventListener('resize', this.handleUpdateStyles)
-  }
-
-  render() {
-    const {
-      testID,
+export const PopoverDialog = forwardRef<PopoverDialogRef, PopoverDialogProps>(
+  (
+    {
       id,
       style,
+      color,
+      onHide,
+      testID,
       visible,
       contents,
-      onClickOutside,
+      position,
+      className,
+      caretSize,
+      appearance,
+      triggerRef,
       onMouseLeave,
-    } = this.props
+      onClickOutside,
+      distanceFromTrigger,
+      enableDefaultStyles,
+    },
+    ref
+  ) => {
+    const dialogRef = useRef<HTMLDivElement>(null)
+    const caretRef = useRef<HTMLDivElement>(null)
 
-    if (!visible) {
-      return null
+    const handleUpdateStyles = (): void => {
+      if (!triggerRef.current || !dialogRef.current) {
+        return
+      }
+
+      const {dialogStyles, caretStyles} = calculatePopoverStyles(
+        position,
+        triggerRef,
+        dialogRef,
+        caretSize,
+        distanceFromTrigger
+      )
+
+      const dialogStyleString = convertCSSPropertiesToString(dialogStyles)
+      const caretStyleString = convertCSSPropertiesToString(caretStyles)
+
+      if (dialogRef.current) {
+        dialogRef.current.setAttribute('style', dialogStyleString)
+      }
+
+      if (caretRef.current) {
+        caretRef.current.setAttribute('style', caretStyleString)
+      }
     }
+
+    const popoverDialogClassName = classnames('cf-popover', {
+      [`${className}`]: className,
+      [`cf-popover__${color}`]: color,
+      [`cf-popover__${appearance}`]: appearance,
+    })
+
+    const contentsClassName = classnames('cf-popover--contents', {
+      'cf-popover--contents__default-styles': enableDefaultStyles,
+    })
+
+    const hidePopoverWhenOutOfView = (
+      entries: IntersectionObserverEntry[]
+    ): void => {
+      if (visible) {
+        return
+      }
+
+      if (!!entries.length && entries[0].isIntersecting === false) {
+        onHide()
+      }
+    }
+
+    const observer = new IntersectionObserver(hidePopoverWhenOutOfView)
+
+    useLayoutEffect((): (() => void) => {
+      handleUpdateStyles()
+      observer.observe(triggerRef.current)
+      // The third argument in addEventListener is "false" by default and controls bubbling
+      // scroll events do not bubble by default so setting this to "true"
+      // allows the listener to pick up scroll events from nested scrollable elements
+      window.addEventListener('scroll', handleUpdateStyles, true)
+      window.addEventListener('resize', handleUpdateStyles)
+
+      return (): void => {
+        observer.disconnect()
+        window.removeEventListener('scroll', handleUpdateStyles)
+        window.removeEventListener('resize', handleUpdateStyles)
+      }
+    }, [])
+
+    useLayoutEffect(() => {
+      handleUpdateStyles()
+    })
+
+    // Ensure styles are updated when the
+    // enableDefaultStyles prop changes
+    useEffect(() => {
+      handleUpdateStyles()
+    }, [enableDefaultStyles])
+
+    // Ensure dialog element is in focus on mount
+    // in order to enable escape key behavior
+    useEffect(() => {
+      const okayToPullFocus = !document.activeElement
+      if (dialogRef.current && okayToPullFocus) {
+        dialogRef.current.focus()
+      }
+    }, [])
 
     return (
       <ClickOutside onClickOutside={onClickOutside}>
         <div
-          onMouseLeave={onMouseLeave}
-          className={this.className}
-          ref={this.dialogRef}
-          data-testid={testID}
           id={id}
+          ref={dialogRef}
+          className={popoverDialogClassName}
+          data-testid={`${testID}--dialog`}
+          onMouseLeave={onMouseLeave}
+          tabIndex={-1}
         >
           <div
+            ref={ref}
             style={style}
-            className={this.contentsClassName}
+            className={contentsClassName}
             data-testid={`${testID}--contents`}
           >
             {contents}
           </div>
-          <div className="cf-popover--caret" ref={this.caretRef} />
+          <div className="cf-popover--caret" ref={caretRef} />
         </div>
       </ClickOutside>
     )
   }
+)
 
-  private get className(): string {
-    const {color, type, className} = this.props
-
-    return classnames('cf-popover', {
-      [`${className}`]: className,
-      [`cf-popover__${color}`]: color,
-      [`cf-popover__${type}`]: type,
-    })
-  }
-
-  private get contentsClassName(): string {
-    const {enableDefaultStyles} = this.props
-
-    return classnames('cf-popover--contents', {
-      'cf-popover--contents__default-styles': enableDefaultStyles,
-    })
-  }
-
-  private handleUpdateStyles = (): void => {
-    const {position, triggerRef, caretSize, distanceFromTrigger} = this.props
-    const {dialogStyles, caretStyles} = calculatePopoverStyles(
-      position,
-      triggerRef,
-      this.dialogRef,
-      caretSize,
-      distanceFromTrigger
-    )
-
-    const dialogStyleString = convertCSSPropertiesToString(dialogStyles)
-    const caretStyleString = convertCSSPropertiesToString(caretStyles)
-
-    if (this.dialogRef.current) {
-      this.dialogRef.current.setAttribute('style', dialogStyleString)
-    }
-
-    if (this.caretRef.current) {
-      this.caretRef.current.setAttribute('style', caretStyleString)
-    }
-  }
-}
+PopoverDialog.displayName = 'PopoverDialog'
